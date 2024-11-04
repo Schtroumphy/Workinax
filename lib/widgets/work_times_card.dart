@@ -4,8 +4,8 @@ import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/icon_column.dart';
 
-class RoundedCard extends StatelessWidget {
-  const RoundedCard({super.key});
+class WorkTimesCard extends StatelessWidget {
+  const WorkTimesCard({super.key});
 
   @override
   Widget build(BuildContext context) {

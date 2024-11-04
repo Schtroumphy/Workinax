@@ -3,9 +3,9 @@ import 'package:workinax/widgets/action_button_row.dart';
 import 'package:workinax/widgets/app_divider.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/break_dialog.dart';
+import 'package:workinax/widgets/clock_in_card.dart';
 import 'package:workinax/widgets/history_row.dart';
-import 'package:workinax/widgets/rounded_button.dart';
-import 'package:workinax/widgets/rounded_card.dart';
+import 'package:workinax/widgets/work_times_card.dart';
 import 'package:workinax/widgets/today_rounded.dart';
 
 enum ModeType { notStarted, workInProgress, breakInProgress, workEnd;
@@ -88,7 +88,7 @@ class _DashboardContentState extends State<DashboardContent> {
           },
           const SizedBox(height: 16),
           if (ModeType.working.contains(mode))
-            const AspectRatio(aspectRatio: 10 / 4, child: RoundedCard()),
+            const AspectRatio(aspectRatio: 10 / 4, child: WorkTimesCard()),
           const SizedBox(height: 16),
           const AppText('Historique', fontSizeType: FontSizeType.large),
           const SizedBox(height: 16),
@@ -120,50 +120,5 @@ class _DashboardContentState extends State<DashboardContent> {
 
   _onClockOutClick() {
     changeMode(ModeType.workEnd);
-  }
-}
-
-class ClockInCard extends StatelessWidget {
-  const ClockInCard({super.key, required this.onClockInClick});
-
-  final VoidCallback onClockInClick;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.center,
-      child: AspectRatio(
-        aspectRatio: 10 / 4,
-        child: Card(
-          elevation: 8,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const AppText("Let's go to work !"),
-                SizedBox(
-                    width: double.infinity,
-                    child: RoundedButton(
-                      label: 'Embaucher',
-                      onClick: onClockInClick,
-                    )),
-                const AppText("Ton temps de travail sera renseigné ici."),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ClockInTimeRow extends StatelessWidget {
-  const ClockInTimeRow({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
