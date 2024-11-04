@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 
 class AppOutlinedButton extends StatelessWidget {
-  const AppOutlinedButton({super.key, required this.label});
+  const AppOutlinedButton({super.key, required this.label, this.onClick});
 
   final String label;
+  final VoidCallback? onClick;
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: () {},
+      onPressed: onClick,
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         shape: RoundedRectangleBorder(
