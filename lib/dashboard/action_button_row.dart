@@ -22,7 +22,7 @@ class ActionButtonRow extends StatelessWidget {
       children: [
         Expanded(
             child: RoundedButton(
-          label: firstButtonLabel ?? 'Prendre une pause',
+          label: firstButtonLabel,
           onClick: onBreakClick,
         )),
         if (secondButtonLabel != null) ...[

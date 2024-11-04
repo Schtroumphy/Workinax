@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/rounded_text.dart';
 
-class HistoryRow extends StatelessWidget {
-  const HistoryRow({super.key});
+class HistoryItem extends StatelessWidget {
+  const HistoryItem({super.key});
 
   @override
   Widget build(BuildContext context) {

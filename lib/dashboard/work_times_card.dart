@@ -31,10 +31,17 @@ class WorkTimesCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                IconColumn(icon: Icons.share_arrival_time_outlined, label: '5:30', subtitle: 'Effectif'),
-                IconColumn(icon: Icons.coffee, label: '0:15', subtitle: 'Pause'),
+                IconColumn(
+                    icon: Icons.share_arrival_time_outlined,
+                    label: '5:30',
+                    subtitle: 'Effectif'),
+                IconColumn(
+                    icon: Icons.coffee, label: '0:15', subtitle: 'Pause'),
                 IconColumn(icon: Icons.coffee, label: '_', subtitle: 'Pause'),
-                IconColumn(icon: Icons.hourglass_top_rounded, label: '2:30', subtitle: 'Restant'),
+                IconColumn(
+                    icon: Icons.hourglass_top_rounded,
+                    label: '2:30',
+                    subtitle: 'Restant'),
               ],
             )
           ],

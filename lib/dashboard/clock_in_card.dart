@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/rounded_button.dart';
