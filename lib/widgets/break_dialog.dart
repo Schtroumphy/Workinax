@@ -4,33 +4,38 @@ import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/rounded_button.dart';
 
-showBreakDialog(BuildContext context) {
-  showDialog(
+Future<bool?> showBreakDialog(
+    BuildContext context, bool isBreakIn) {
+  return showDialog<bool>(
     context: context,
-    builder: (_) => const BreakDialogContent(),
+    builder: (_) => BreakDialogContent(
+      isBreakIn: isBreakIn,
+    ),
   );
 }
 
 class BreakDialogContent extends StatelessWidget {
-  const BreakDialogContent({super.key});
+  const BreakDialogContent({super.key, this.isBreakIn = true});
+
+  final bool isBreakIn;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Center(
+      title: Center(
         child: AppText(
-          "Let's take a break ...",
+          isBreakIn ? "Let's take a break ..." : "Let's go back to work",
           fontSizeType: FontSizeType.large,
           color: AppColor.primaryColor,
         ),
       ),
-      content: const Padding(
-        padding: EdgeInsets.all(16.0),
+      content: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             AppText(
-              "Commencer le minuteur de pause ?",
+              "${isBreakIn ? 'Commencer' : 'Arrêter'} le minuteur de pause ?",
               fontSizeType: FontSizeType.medium,
             ),
           ],
@@ -40,12 +45,14 @@ class BreakDialogContent extends StatelessWidget {
         AppOutlinedButton(
           label: 'Annuler',
           onClick: () {
-            Navigator.pop(context);
+            Navigator.pop(context, false);
           },
         ),
         RoundedButton(
           label: 'Confirmer',
-          onClick: () {},
+          onClick: () {
+            Navigator.pop(context, true);
+          },
         ),
       ],
     );

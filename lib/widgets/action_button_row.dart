@@ -3,9 +3,17 @@ import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/rounded_button.dart';
 
 class ActionButtonRow extends StatelessWidget {
-  const ActionButtonRow({super.key, this.onBreakClick, this.onClockOutClick});
+  const ActionButtonRow({
+    super.key,
+    this.onBreakClick,
+    this.onClockOutClick,
+    required this.firstButtonLabel,
+    this.secondButtonLabel,
+  });
 
+  final String firstButtonLabel;
   final VoidCallback? onBreakClick;
+  final String? secondButtonLabel;
   final VoidCallback? onClockOutClick;
 
   @override
@@ -14,15 +22,18 @@ class ActionButtonRow extends StatelessWidget {
       children: [
         Expanded(
             child: RoundedButton(
-          label: 'Prendre une pause',
+          label: firstButtonLabel ?? 'Prendre une pause',
           onClick: onBreakClick,
         )),
-        const SizedBox(width: 8),
-        Expanded(
+        if (secondButtonLabel != null) ...[
+          const SizedBox(width: 8),
+          Expanded(
             child: AppOutlinedButton(
-          label: 'Débaucher',
+              label: secondButtonLabel!,
               onClick: onClockOutClick,
-        )),
+            ),
+          ),
+        ]
       ],
     );
   }
