@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:workinax/data/database_helper.dart';
 import 'package:workinax/model/mode_type.dart';
 import 'package:workinax/dashboard/action_button_row.dart';
+import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/widgets/app_divider.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/break_dialog.dart';
@@ -8,16 +10,18 @@ import 'package:workinax/dashboard/clock_in_card.dart';
 import 'package:workinax/dashboard/history_item.dart';
 import 'package:workinax/dashboard/today_rounded.dart';
 import 'package:workinax/dashboard/work_times_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DashboardContent extends StatefulWidget {
+class DashboardContent extends ConsumerStatefulWidget {
   const DashboardContent({super.key});
 
   @override
-  State<DashboardContent> createState() => _DashboardContentState();
+  ConsumerState<DashboardContent> createState() => _DashboardContentState();
 }
 
-class _DashboardContentState extends State<DashboardContent> {
+class _DashboardContentState extends ConsumerState<DashboardContent> {
   late ModeType mode;
+  List<WorkClock> workClocks = [];
 
   changeMode(ModeType targetMode) {
     setState(() {
@@ -33,6 +37,7 @@ class _DashboardContentState extends State<DashboardContent> {
 
   @override
   Widget build(BuildContext context) {
+    final workClocks = ref.watch(getAllProvider);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,9 +70,15 @@ class _DashboardContentState extends State<DashboardContent> {
           const SizedBox(height: 16),
           const AppText('Historique', fontSizeType: FontSizeType.large),
           const SizedBox(height: 16),
-          ...[
-            for (var i = 0; i < 25; i++) const HistoryItem(),
-          ],
+          workClocks.when(
+            data: (wc) {
+              return Column(
+                children: [for (var workClock in wc) HistoryItem(workClock)],
+              );
+            },
+            error: (_, __) => const AppText('No data yet !', color: Colors.grey,),
+            loading: () => const Text("Data is loading..."),
+          ),
         ],
       ),
     );
@@ -89,6 +100,9 @@ class _DashboardContentState extends State<DashboardContent> {
 
   _onClockInClick() {
     changeMode(ModeType.workInProgress);
+
+    // Save clock in in db
+    DatabaseHelper().insertWorkClock(WorkClock.init());
   }
 
   _onClockOutClick() {

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/rounded_text.dart';
 
 class HistoryItem extends StatelessWidget {
-  const HistoryItem({super.key});
+  const HistoryItem(this.workClock, {super.key});
+
+  final WorkClock workClock;
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +18,23 @@ class HistoryItem extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       margin: const EdgeInsets.only(bottom: 12),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           RoundedText(
-            '04/11',
+            workClock.date.formatDayMonth,
             color: AppColor.lightBlue,
           ),
-          ClockIn(),
-          Overtime(),
+          ClockIn(
+            label: [workClock.startWorkDate, workClock.endWorkDate].formatRange,
+          ),
+          Overtime(
+            label: [workClock.date.copyWith(hour: 12, minute: 30), workClock.endWorkDate].formatHoursDiff,
+          ),
           //BreakTime(),
-          TotalHours(),
+          TotalHours(
+            label: [workClock.endWorkDate, workClock.startWorkDate].formatHoursDiff,
+          ),
         ],
       ),
     );
@@ -64,25 +74,28 @@ class IconRow extends StatelessWidget {
 }
 
 class ClockIn extends StatelessWidget {
-  const ClockIn({super.key});
+  const ClockIn({super.key, this.label});
 
+  final String? label;
   @override
   Widget build(BuildContext context) {
-    return const IconRow(
+    return IconRow(
       icon: Icons.access_time_outlined,
-      label: '15:30 - 16:30',
+      label: label ?? 'N/A',
     );
   }
 }
 
 class Overtime extends StatelessWidget {
-  const Overtime({super.key});
+  const Overtime({super.key, this.label});
+
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
-    return const IconRow(
+    return IconRow(
       icon: Icons.more_time_rounded,
-      label: '1:30',
+      label: label ?? '1:30',
       color: AppColor.lightGreen,
       outlined: true,
     );
@@ -90,26 +103,30 @@ class Overtime extends StatelessWidget {
 }
 
 class BreakTime extends StatelessWidget {
-  const BreakTime({super.key});
+  const BreakTime({super.key, this.label});
+
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
-    return const IconRow(
+    return IconRow(
       icon: Icons.coffee_outlined,
-      label: '1:10',
+      label: label ?? '1:10',
       outlined: true,
     );
   }
 }
 
 class TotalHours extends StatelessWidget {
-  const TotalHours({super.key});
+  const TotalHours({super.key, this.label});
+
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
-    return const IconRow(
+    return IconRow(
       icon: Icons.history_toggle_off_rounded,
-      label: '8:00',
+      label: label ?? '8:00',
       outlined: true,
     );
   }
