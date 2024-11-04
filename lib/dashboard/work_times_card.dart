@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
+import 'package:workinax/widgets/edit_time_dialog.dart';
 import 'package:workinax/widgets/icon_column.dart';
 
 class WorkTimesCard extends StatelessWidget {
@@ -9,11 +10,11 @@ class WorkTimesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Card(
+    return Card(
       shadowColor: Colors.transparent,
       color: AppColor.lightBlue,
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -21,14 +22,22 @@ class WorkTimesCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppText(
+                const AppText(
                   'Work in progress ...',
                   fontSizeType: FontSizeType.medium,
                 ),
-                AppOutlinedButton(label: 'Modifier'),
+                AppOutlinedButton(
+                  label: 'Modifier',
+                  onClick: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => const EditTimeDialog(),
+                    );
+                  },
+                ),
               ],
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconColumn(
