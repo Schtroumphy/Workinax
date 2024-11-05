@@ -26,14 +26,14 @@ class HistoryItem extends StatelessWidget {
             color: AppColor.lightBlue,
           ),
           ClockIn(
-            label: [workClock.startWorkDate, workClock.endWorkDate].formatRange,
+            label: [workClock.startWorkTime, workClock.endWorkTime].formatRange,
           ),
           Overtime(
-            label: [workClock.date.copyWith(hour: 12, minute: 30), workClock.endWorkDate].formatHoursDiff,
+            label: [const TimeOfDay(hour: 12, minute: 30), workClock.endWorkTime].formatHoursDiff,
           ),
           //BreakTime(),
           TotalHours(
-            label: [workClock.endWorkDate, workClock.startWorkDate].formatHoursDiff,
+            label: [workClock.endWorkTime, workClock.startWorkTime].formatHoursDiff,
           ),
         ],
       ),

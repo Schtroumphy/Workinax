@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:workinax/data/converters/date_time_converter.dart';
 
@@ -12,11 +13,11 @@ class WorkClock {
   @DateTimeConverter()
   final DateTime date;
 
-  @DateTimeToTimeConverter()
-  final DateTime? startWorkDate;
+  @TimeOfDayConverter()
+  final TimeOfDay? startWorkTime;
 
-  @DateTimeToTimeConverter()
-  final DateTime? endWorkDate;
+  @TimeOfDayConverter()
+  final TimeOfDay? endWorkTime;
 
   final Duration? firstBreakDuration;
   final Duration? secondBreakDuration;
@@ -24,8 +25,8 @@ class WorkClock {
   WorkClock({
     this.id,
     required this.date,
-    this.startWorkDate,
-    this.endWorkDate,
+    this.startWorkTime,
+    this.endWorkTime,
     this.firstBreakDuration,
     this.secondBreakDuration,
   });
@@ -33,12 +34,12 @@ class WorkClock {
   WorkClock.init()
       : id = null,
         date = DateTime.now(),
-        startWorkDate = DateTime.now(),
-        endWorkDate = null,
+        startWorkTime = TimeOfDay.now(),
+        endWorkTime = null,
         firstBreakDuration = null,
         secondBreakDuration = null;
 
-  int get totalHours => (endWorkDate?.hour ?? 0) - (startWorkDate?.hour ?? 0);
+  int get totalHours => (endWorkTime?.hour ?? 0) - (startWorkTime?.hour ?? 0);
 
   factory WorkClock.fromJson(Map<String, dynamic> json) =>
       _$WorkClockFromJson(json);

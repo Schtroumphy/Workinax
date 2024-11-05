@@ -8,7 +8,8 @@ part 'database_helper.g.dart';
 
 @riverpod
 Future<List<WorkClock>> getAll(Ref ref) async {
-  return ref.read(databaseHelperProvider.notifier).getAllWorkClock();
+  final service = ref.watch(workClockServiceProvider);
+  return service.getAllWorkClock();
 }
 
 @riverpod
@@ -16,6 +17,11 @@ class DatabaseHelper extends _$DatabaseHelper {
   static Database? _database;
 
   String path = 'workinax.db';
+
+  @override
+  FutureOr<Database> build() {
+    return database;
+  }
 
   Future<Database> get database async {
     if (_database != null) {
@@ -25,11 +31,6 @@ class DatabaseHelper extends _$DatabaseHelper {
     // If _database is null, initialize it
     _database = await initDatabase();
     return _database!;
-  }
-
-  @override
-  FutureOr<Database> build() {
-    return initDatabase();
   }
 
   Future<Database> initDatabase() async {
@@ -42,8 +43,8 @@ class DatabaseHelper extends _$DatabaseHelper {
         (
           id                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
           date                     TEXT UNIQUE,
-          startWorkDate            TEXT,
-          endWorkDate              TEXT DEFAULT NULL,
+          startWorkTime            TEXT,
+          endWorkTime              TEXT DEFAULT NULL,
           firstBreakDuration       INT DEFAULT 0,
           secondBreakDuration      INT DEFAULT 0
         )  
@@ -51,19 +52,32 @@ class DatabaseHelper extends _$DatabaseHelper {
       },
     );
   }
+}
+
+@Riverpod(keepAlive: true)
+WorkClockService workClockService(Ref ref) {
+  return WorkClockService(ref);
+}
+
+class WorkClockService {
+  final Ref ref;
+
+  WorkClockService(this.ref);
 
   Future<void> insertWorkClock(WorkClock workClock) async {
-    final Database db = await database;
+    final Database db = await ref.read(databaseHelperProvider.notifier).database;
 
     await db.insert(
       WorkClock.tableName,
       workClock.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
+    ref.invalidateSelf();
   }
 
   Future<List<WorkClock>> getAllWorkClock() async {
-    final Database db = await database;
+    final Database db = await ref.read(databaseHelperProvider.notifier).database;
 
     final rows = await db.query(WorkClock.tableName);
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:workinax/extension/time_of_day_extension.dart';
 
 extension DateExtension on DateTime {
   String get formatShortDate {
@@ -24,25 +25,16 @@ extension DateExtension on DateTime {
   }
 }
 
-extension DateListExtension on List<DateTime?> {
+extension DateListExtension on List<TimeOfDay?> {
   String get formatRange {
     if (length != 2 || this[0] == null) return 'N/A';
 
-    return '${this[0]!.formatHoursMinutes} - ${this[1]?.formatHoursMinutes ?? 'N/A'}';
+    return '${this[0]!.formatTimeOfDay} - ${this[1]?.formatTimeOfDay ?? 'N/A'}';
   }
 
   String get formatHoursDiff {
     if (length != 2 || any((e) => e == null)) return 'N/A';
 
-    final diff = this[0]!.difference(this[1]!);
-    return '${diff.inHours}:${diff.inMinutes}';
-  }
-}
-
-extension TimeOfDayExtension on TimeOfDay {
-  String get formatTimeOfDay {
-    final hour = this.hour.toString().padLeft(2, '0');
-    final minute = this.minute.toString().padLeft(2, '0');
-    return "$hour:$minute";
+    return timeDifference(this[0]!, this[1]!);
   }
 }

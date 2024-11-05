@@ -102,7 +102,7 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
     changeMode(ModeType.workInProgress);
 
     // Save clock in in db
-    DatabaseHelper().insertWorkClock(WorkClock.init());
+    ref.read(workClockServiceProvider).insertWorkClock(WorkClock.init());
   }
 
   _onClockOutClick() {

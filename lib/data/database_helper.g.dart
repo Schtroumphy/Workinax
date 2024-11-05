@@ -6,7 +6,7 @@ part of 'database_helper.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getAllHash() => r'bb24e271aab0880afec5f1d74f31537a8335b655';
+String _$getAllHash() => r'275610a84d4be6d0483fb732edab4fcc413ba56f';
 
 /// See also [getAll].
 @ProviderFor(getAll)
@@ -22,7 +22,24 @@ final getAllProvider = AutoDisposeFutureProvider<List<WorkClock>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetAllRef = AutoDisposeFutureProviderRef<List<WorkClock>>;
-String _$databaseHelperHash() => r'9539e054be8835352409819fe85eea86e73eb8c0';
+String _$workClockServiceHash() => r'5353e940cd6a0c1e85d531d1178318fe16015c0f';
+
+/// See also [workClockService].
+@ProviderFor(workClockService)
+final workClockServiceProvider = Provider<WorkClockService>.internal(
+  workClockService,
+  name: r'workClockServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$workClockServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef WorkClockServiceRef = ProviderRef<WorkClockService>;
+String _$databaseHelperHash() => r'ec128c0afb2f7df671b6078939a8687bd2a7ad5d';
 
 /// See also [DatabaseHelper].
 @ProviderFor(DatabaseHelper)
