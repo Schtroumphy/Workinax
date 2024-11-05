@@ -6,6 +6,6 @@ enum ModeType {
 
   static List<ModeType> get working => [
     workInProgress,
-    ModeType.breakInProgress,
+    breakInProgress,
   ];
 }

@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
 
-extension TimeOfDayExtension on TimeOfDay {
+extension TimeOfDayExtension on TimeOfDay? {
   String get formatTimeOfDay {
-    final hour = this.hour.toString().padLeft(2, '0');
-    final minute = this.minute.toString().padLeft(2, '0');
+    if(this == null) return 'N/A';
+
+    final hour = this!.hour.toString().padLeft(2, '0');
+    final minute = this!.minute.toString().padLeft(2, '0');
     return "$hour:$minute";
   }
 }

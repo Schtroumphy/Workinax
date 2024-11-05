@@ -38,6 +38,14 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
   @override
   Widget build(BuildContext context) {
     final workClocks = ref.watch(getAllProvider);
+    final todayWC = ref.watch(getTodayWorkClockProvider);
+
+    ref.listen(getTodayWorkClockProvider, (previous, next) {
+      if (!next.isLoading && next.valueOrNull != null) {
+        changeMode(ModeType.workInProgress);
+      }
+    });
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +74,14 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
           },
           const SizedBox(height: 16),
           if (ModeType.working.contains(mode))
-            const AspectRatio(aspectRatio: 10 / 4, child: WorkTimesCard()),
+            todayWC.when(
+              data: (wc) => AspectRatio(
+                aspectRatio: 10 / 4,
+                child: WorkTimesCard(workClock: wc),
+              ),
+              error: (e, _) => const Text('No data yet'),
+              loading: () => const CircularProgressIndicator(),
+            ),
           const SizedBox(height: 16),
           const AppText('Historique', fontSizeType: FontSizeType.large),
           const SizedBox(height: 16),
@@ -76,7 +91,10 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
                 children: [for (var workClock in wc) HistoryItem(workClock)],
               );
             },
-            error: (_, __) => const AppText('No data yet !', color: Colors.grey,),
+            error: (_, __) => const AppText(
+              'No data yet !',
+              color: Colors.grey,
+            ),
             loading: () => const Text("Data is loading..."),
           ),
         ],
@@ -107,5 +125,8 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
 
   _onClockOutClick() {
     changeMode(ModeType.workEnd);
+    ref
+        .read(workClockServiceProvider)
+        .updateWorkClock(date: DateTime.now(), end: TimeOfDay.now());
   }
 }

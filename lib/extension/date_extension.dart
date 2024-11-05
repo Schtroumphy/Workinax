@@ -3,7 +3,12 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:workinax/extension/time_of_day_extension.dart';
 
+var dbDateFormat = DateFormat('dd/MM/yyyy');
+
 extension DateExtension on DateTime {
+
+  String get formatDbDate => dbDateFormat.format(this);
+
   String get formatShortDate {
     initializeDateFormatting('fr_FR');
     return DateFormat('EE d MMM, y', 'fr_FR')

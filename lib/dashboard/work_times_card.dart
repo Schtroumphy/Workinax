@@ -1,12 +1,23 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:workinax/data/converters/date_time_converter.dart';
+import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extension/duration_extension.dart';
+import 'package:workinax/extension/time_of_day_extension.dart';
+import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/edit_time_dialog.dart';
 import 'package:workinax/widgets/icon_column.dart';
+import 'package:workinax/widgets/rounded_text.dart';
+import 'package:workinax/widgets/timer.dart';
 
 class WorkTimesCard extends StatelessWidget {
-  const WorkTimesCard({super.key});
+  const WorkTimesCard({super.key, this.workClock});
+
+  final WorkClock? workClock;
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +33,13 @@ class WorkTimesCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const AppText(
-                  'Work in progress ...',
+                AppText(
+                  workClock?.endWorkTime != null
+                      ? 'Temps de travail du jour'
+                      : 'Travail en cours ...',
                   fontSizeType: FontSizeType.medium,
                 ),
-                AppOutlinedButton(
+                workClock?.endWorkTime != null ? AppOutlinedButton(
                   label: 'Modifier',
                   onClick: () {
                     showDialog(
@@ -34,23 +47,31 @@ class WorkTimesCard extends StatelessWidget {
                       builder: (_) => const EditTimeDialog(),
                     );
                   },
-                ),
+                ) : TimerFromStartTime(startTime: workClock?.startWorkTime),
               ],
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconColumn(
                     icon: Icons.share_arrival_time_outlined,
-                    label: '5:30',
-                    subtitle: 'Effectif'),
+                    label: workClock?.startWorkTime?.formatTimeOfDay ?? 'N/A',
+                    subtitle: 'Embauché'),
                 IconColumn(
-                    icon: Icons.coffee, label: '0:15', subtitle: 'Pause'),
-                IconColumn(icon: Icons.coffee, label: '_', subtitle: 'Pause'),
+                  icon: Icons.coffee,
+                  label: workClock?.firstBreakDuration?.inMinutes.toString() ?? '-',
+                  subtitle: 'Pause',
+                ),
                 IconColumn(
-                    icon: Icons.hourglass_top_rounded,
-                    label: '2:30',
-                    subtitle: 'Restant'),
+                  icon: Icons.coffee,
+                  label: workClock?.firstBreakDuration?.inMinutes.toString() ?? '-',
+                  subtitle: 'Pause',
+                ),
+                  IconColumn(
+                  icon: Icons.exit_to_app,
+                  label: workClock?.endWorkTime.formatTimeOfDay ?? 'N/A',
+                  subtitle: 'Débauché',
+                ),
               ],
             )
           ],

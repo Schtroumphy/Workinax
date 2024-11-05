@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:workinax/widgets/app_text.dart';
 
 class RoundedText extends StatelessWidget {
-  const RoundedText(this.label, {super.key, this.color, this.outlined = false});
+  const RoundedText(this.label, {super.key, this.color, this.outlined = false, this.textColor});
 
   final String label;
   final Color? color;
+  final Color? textColor;
   final bool outlined;
 
   @override
@@ -20,6 +21,7 @@ class RoundedText extends StatelessWidget {
       child: AppText(
         label,
         fontSizeType: FontSizeType.medium,
+        color: textColor ?? Colors.black,
       ),
     );
   }

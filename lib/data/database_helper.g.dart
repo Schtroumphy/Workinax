@@ -22,6 +22,24 @@ final getAllProvider = AutoDisposeFutureProvider<List<WorkClock>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetAllRef = AutoDisposeFutureProviderRef<List<WorkClock>>;
+String _$getTodayWorkClockHash() => r'9382a9b536d6e479b2a90b661db83369368368f1';
+
+/// See also [getTodayWorkClock].
+@ProviderFor(getTodayWorkClock)
+final getTodayWorkClockProvider =
+    AutoDisposeFutureProvider<WorkClock?>.internal(
+  getTodayWorkClock,
+  name: r'getTodayWorkClockProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getTodayWorkClockHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetTodayWorkClockRef = AutoDisposeFutureProviderRef<WorkClock?>;
 String _$workClockServiceHash() => r'5353e940cd6a0c1e85d531d1178318fe16015c0f';
 
 /// See also [workClockService].

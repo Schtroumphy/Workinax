@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extension/time_of_day_extension.dart';
 import 'package:workinax/model/work_clock.dart';
 
 part 'database_helper.g.dart';
@@ -10,6 +13,12 @@ part 'database_helper.g.dart';
 Future<List<WorkClock>> getAll(Ref ref) async {
   final service = ref.watch(workClockServiceProvider);
   return service.getAllWorkClock();
+}
+
+@riverpod
+Future<WorkClock?> getTodayWorkClock(Ref ref) async {
+  final service = ref.watch(workClockServiceProvider);
+  return service.getWorkClockByDate(DateTime.now());
 }
 
 @riverpod
@@ -65,7 +74,8 @@ class WorkClockService {
   WorkClockService(this.ref);
 
   Future<void> insertWorkClock(WorkClock workClock) async {
-    final Database db = await ref.read(databaseHelperProvider.notifier).database;
+    final Database db =
+        await ref.read(databaseHelperProvider.notifier).database;
 
     await db.insert(
       WorkClock.tableName,
@@ -77,11 +87,42 @@ class WorkClockService {
   }
 
   Future<List<WorkClock>> getAllWorkClock() async {
-    final Database db = await ref.read(databaseHelperProvider.notifier).database;
+    final Database db =
+        await ref.read(databaseHelperProvider.notifier).database;
 
     final rows = await db.query(WorkClock.tableName);
 
     return rows.map((row) => WorkClock.fromJson(row)).toList();
   }
 
+  Future<WorkClock> getWorkClockByDate(DateTime date) async {
+    final Database db =
+        await ref.read(databaseHelperProvider.notifier).database;
+
+    final row = await db.query(
+      WorkClock.tableName,
+      where: 'date = ?',
+      whereArgs: [date.formatDbDate],
+      limit: 1,
+    );
+
+    return WorkClock.fromJson(row.first);
+  }
+
+  void updateWorkClock({required DateTime date, TimeOfDay? start, TimeOfDay? end}) async {
+    final Database db = await ref.read(databaseHelperProvider.notifier).database;
+
+    final Map<String, Object?> valuesToUpdate = {
+      'startWorkTime' : start?.formatTimeOfDay,
+      'endWorkTime' : end?.formatTimeOfDay,
+    }..removeWhere((key, value) => value == null || value == '');
+
+    final formattedValues = valuesToUpdate.keys.map((key) => '$key = ?').join(',');
+
+    final sql = 'UPDATE ${WorkClock.tableName} SET $formattedValues WHERE date = ?';
+
+    await db.rawUpdate(sql, [...valuesToUpdate.values, date.formatDbDate]);
+
+    ref.invalidateSelf();
+  }
 }
