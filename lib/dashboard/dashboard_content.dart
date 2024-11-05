@@ -21,17 +21,10 @@ class DashboardContent extends ConsumerStatefulWidget {
 class _DashboardContentState extends ConsumerState<DashboardContent> {
   late ModeType mode;
   List<WorkClock> workClocks = [];
-  TimeOfDay? breakStart;
 
   changeMode(ModeType targetMode) {
     setState(() {
       mode = targetMode;
-    });
-  }
-
-  setBreakStart({bool reset = false}) {
-    setState(() {
-      breakStart = reset ? null : TimeOfDay.now();
     });
   }
 
@@ -73,17 +66,15 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
   _onBreakInClick() async {
     final result = await showBreakDialog(context, isBreakIn: true);
     if (result == true) {
-      setBreakStart();
       changeMode(ModeType.breakInProgress);
     }
   }
 
   _onBreakOutClick({bool isSecondBreak = false}) async {
-    final result = await showBreakDialog(context, breakStartTime: breakStart);
+    final result = await showBreakDialog(context);
     if (result == true) {
-      ref.read(workClockServiceProvider).setBreak(breakStart, isSecondBreak);
+      ref.read(workClockServiceProvider).setBreak(isSecondBreak);
     }
-    setBreakStart(reset: true);
     changeMode(ModeType.workInProgress);
   }
 

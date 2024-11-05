@@ -68,17 +68,16 @@ class Historic extends ConsumerWidget {
                     ),
                     confirmDismiss: (_) async {
                       final current = workClocks[index];
-                      /** TODO UNCOMMENT
-                       * if (current.date.formatShortDate ==
+                      if (current.date.formatShortDate ==
                           DateTime.now().formatShortDate) {
-
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
                           backgroundColor: AppColor.primaryColor,
-                          content: Text("Tu ne peux pas supprimer la saisie du jour"),
-                          ));
-                          return false;
-                          } // Do not allow today workClock deletion
-                       */
+                          content: Text(
+                              "Tu ne peux pas supprimer la saisie du jour"),
+                        ));
+                        return false;
+                      } // Do not allow today workClock deletion
 
                       final shouldDismiss =
                           await _onDismiss(context, ref, current);

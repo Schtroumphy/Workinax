@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:workinax/dashboard/application/timer_notifier.dart';
 import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/extension/time_of_day_extension.dart';
@@ -110,9 +111,8 @@ class WorkClockService {
     return WorkClock.fromJson(row.first);
   }
 
-  void setBreak(TimeOfDay? startBreakTime, bool isSecondBreak) {
-    final breakTime =
-        differenceInMinutes(TimeOfDay.now(), startBreakTime ?? TimeOfDay.now());
+  void setBreak( bool isSecondBreak) {
+    Duration? breakTime = ref.read(timerNotifierProvider);
     updateWorkClock(
       date: DateTime.now(),
       firstBreakStart: isSecondBreak ? null : breakTime,

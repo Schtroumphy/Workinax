@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:workinax/dashboard/application/timer_notifier.dart';
+import 'package:workinax/extension/duration_extension.dart';
+import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/app_text.dart';
-import 'package:workinax/widgets/timer.dart';
+import 'package:workinax/widgets/rounded_text.dart';
 
-class BreakTimer extends StatelessWidget {
+class BreakTimer extends ConsumerWidget {
   const BreakTimer({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Row(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final breakDuration = ref.watch(timerNotifierProvider).formatShortDuration;
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AppText('Durée de la pause '),
-        SizedBox(
+        const AppText('Durée de la pause '),
+        const SizedBox(
           width: 8,
         ),
-        TimerFromStartTime()
+        RoundedText(
+          breakDuration,
+          color: AppColor.primaryColor,
+          textColor: Colors.white,
+        )
       ],
     );
   }
