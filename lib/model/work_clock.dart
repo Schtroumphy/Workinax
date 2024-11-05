@@ -44,6 +44,14 @@ class WorkClock {
         firstBreakDuration = null,
         secondBreakDuration = null;
 
+  WorkClock.newOne()
+      : id = null,
+        date = DateTime.now(),
+        startWorkTime = null,
+        endWorkTime = null,
+        firstBreakDuration = null,
+        secondBreakDuration = null;
+
   int get totalHours => (endWorkTime?.hour ?? 0) - (startWorkTime?.hour ?? 0);
 
   Duration get totalBreakTime =>
