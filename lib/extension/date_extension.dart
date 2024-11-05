@@ -1,40 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
+import 'package:workinax/core/constants/app_date_format.dart';
+import 'package:workinax/extension/string_extension.dart';
 import 'package:workinax/extension/time_of_day_extension.dart';
-
-var dbDateFormat = DateFormat('dd/MM/yyyy');
 
 extension DateExtension on DateTime {
 
-  String get formatDbDate => dbDateFormat.format(this);
+  String get formatDbDate => AppDateFormat.dbDateFormat.format(this);
 
   String get formatShortDate {
-    initializeDateFormatting('fr_FR');
-    return DateFormat('EE d MMM, y', 'fr_FR')
-        .format(DateTime.now())
+    initializeDateFormatting(AppDateFormat.locale);
+    return AppDateFormat.mediumDateFormat
+        .format(AppDateFormat.now)
         .replaceAll('.', '')
         .split(' ')
         .map((word) => word[0].toUpperCase() + word.substring(1))
         .join(' ');
   }
 
-  String get formatDayMonth {
-    final DateFormat formatter = DateFormat('dd/MM');
-    return formatter.format(this);
-  }
+  String get formatDayMonth => AppDateFormat.shortDayMonth.format(this);
 
-  String get formatHoursMinutes {
-    final DateFormat formatter = DateFormat('HH:mm');
-    return formatter.format(this);
-  }
+  String get formatHoursMinutes => AppDateFormat.shortHourMinute.format(this);
+
 }
 
 extension DateListExtension on List<TimeOfDay?> {
   String get formatRange {
     if (length != 2 || this[0] == null) return 'N/A';
 
-    return '${this[0]!.formatTimeOfDay} - ${this[1]?.formatTimeOfDay ?? 'N/A'}';
+    return '${this[0]!.formatTimeOfDay} - ${this[1]?.formatTimeOfDay.orNA}';
   }
 
   String get formatHoursDiff {

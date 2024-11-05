@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:workinax/dashboard/widgets/header.dart';
+import 'package:workinax/dashboard/widgets/historic.dart';
+import 'package:workinax/dashboard/widgets/sub_header.dart';
 import 'package:workinax/data/database_helper.dart';
-import 'package:workinax/extension/time_of_day_extension.dart';
 import 'package:workinax/model/mode_type.dart';
-import 'package:workinax/dashboard/action_button_row.dart';
 import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/widgets/app_divider.dart';
-import 'package:workinax/widgets/app_text.dart';
+import 'package:workinax/widgets/app_image.dart';
 import 'package:workinax/widgets/break_dialog.dart';
-import 'package:workinax/dashboard/clock_in_card.dart';
-import 'package:workinax/dashboard/history_item.dart';
-import 'package:workinax/dashboard/today_rounded.dart';
-import 'package:workinax/dashboard/work_times_card.dart';
+import 'package:workinax/dashboard/widgets/work_times_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/widgets/timer.dart';
 
 class DashboardContent extends ConsumerStatefulWidget {
   const DashboardContent({super.key});
@@ -46,120 +43,45 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
 
   @override
   Widget build(BuildContext context) {
-    final workClocks = ref.watch(getAllProvider);
-    final todayWC = ref.watch(getTodayWorkClockProvider);
-
-    ref.listen(getTodayWorkClockProvider, (previous, next) {
-      if (!next.isLoading && next.valueOrNull != null && mode != ModeType.workEnd) {
-        changeMode(ModeType.workInProgress);
-      }
-    });
+    ref.listen(getTodayWorkClockProvider, _onListen);
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppText('Bonjour Axel  👋', fontSizeType: FontSizeType.large),
-              TodayRounded(),
-            ],
-          ),
+          const Header(),
           const AppDivider(),
-          switch (mode) {
-            ModeType.notStarted => ClockInCard(onClockInClick: _onClockInClick),
-            ModeType.workInProgress => ActionButtonRow(
-                firstButtonLabel: 'Prendre une pause',
-                onBreakClick: () => _onBreakInClick(context),
-                secondButtonLabel: 'Débaucher',
-                onClockOutClick: _onClockOutClick,
-              ),
-            ModeType.breakInProgress => ActionButtonRow(
-                firstButtonLabel: 'Reprendre le travail',
-                onBreakClick: () => _onBreakOutClick(context,
-                    isSecondBreak:
-                        todayWC.valueOrNull?.firstBreakDuration != null),
-              ),
-            ModeType.workEnd =>
-              const SizedBox.shrink(),
-          },
+          ActionHeader(
+            mode: mode,
+            onClockInClick: _onClockInClick,
+            onClockOutClick: _onClockOutClick,
+            onBreakInClick: _onBreakInClick,
+            onBreakOutClick: _onBreakOutClick,
+          ),
           const SizedBox(height: 16),
-          if (mode != ModeType.notStarted)
-            todayWC.when(
-              data: (wc) => AspectRatio(
-                aspectRatio: 10 / 4,
-                child: WorkTimesCard(workClock: wc),
-              ),
-              error: (e, _) => const Text('No data yet'),
-              loading: () => const CircularProgressIndicator(),
-            ),
-          const SizedBox(height: 16),
-          if (!mode.isWorking) ...[
-            const AppText('Historique', fontSizeType: FontSizeType.large),
+          if (mode != ModeType.notStarted) ...[
+            const AsyncWorkTimesCard(),
             const SizedBox(height: 16),
-            workClocks.when(
-              data: (wc) {
-                if(wc.isEmpty) return const AppText('No data yet', color: Colors.grey,);
-                return Column(
-                  children: [for (var workClock in wc) HistoryItem(workClock)],
-                );
-              },
-              error: (_, __) => const AppText(
-                'Error retrieving data !',
-                color: Colors.grey,
-              ),
-              loading: () => const Text("Data is loading..."),
-            ),
           ],
-          if (mode == ModeType.workInProgress)
-            AspectRatio(
-              aspectRatio: 4 / 5,
-              child: Image.asset('assets/images/working_rounded.png'),
-            ),
-          if (mode == ModeType.breakInProgress) ...[
-            AspectRatio(
-              aspectRatio: 4 / 5,
-              child: Image.asset('assets/images/coffee.png'),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppText('Durée de la pause '),
-                const SizedBox(
-                  width: 8,
-                ),
-                TimerFromStartTime(
-                  startTime: TimeOfDay.now(),
-                )
-              ],
-            )
-          ]
+          if (!mode.isWorking) const Historic(),
+          AppImage(mode: mode),
         ],
       ),
     );
   }
 
-  _onBreakInClick(BuildContext context) async {
-    final result = await showBreakDialog(context, true);
+  _onBreakInClick() async {
+    final result = await showBreakDialog(context, isBreakIn: true);
     if (result == true) {
       setBreakStart();
       changeMode(ModeType.breakInProgress);
     }
   }
 
-  _onBreakOutClick(BuildContext context, {bool isSecondBreak = false}) async {
-    final result = await showBreakDialog(
-      context,
-      false,
-      breakStartTime: breakStart,
-    );
+  _onBreakOutClick({bool isSecondBreak = false}) async {
+    final result = await showBreakDialog(context, breakStartTime: breakStart);
     if (result == true) {
-      final breakTime = differenceInMinutes(TimeOfDay.now(), breakStart ?? TimeOfDay.now());
-      ref.read(workClockServiceProvider).updateWorkClock(
-          date: DateTime.now(),
-          firstBreakStart: isSecondBreak ? null : breakTime,
-          secondBreakStart: isSecondBreak ? breakTime : null);
+      ref.read(workClockServiceProvider).setBreak(breakStart, isSecondBreak);
     }
     setBreakStart(reset: true);
     changeMode(ModeType.workInProgress);
@@ -167,15 +89,19 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
 
   _onClockInClick() {
     changeMode(ModeType.workInProgress);
-
-    // Save clock in in db
-    ref.read(workClockServiceProvider).insertWorkClock(WorkClock.init());
+    ref.read(workClockServiceProvider).saveWorkClock(WorkClock.init());
   }
 
   _onClockOutClick() {
     changeMode(ModeType.workEnd);
-    ref
-        .read(workClockServiceProvider)
-        .updateWorkClock(date: DateTime.now(), end: TimeOfDay.now());
+    ref.read(workClockServiceProvider).setWorkEnd();
+  }
+
+  _onListen(AsyncValue<WorkClock?>? previous, AsyncValue<WorkClock?> next) {
+    if (!next.isLoading && next.valueOrNull != null && mode != ModeType.workEnd) { //
+      changeMode(next.valueOrNull?.endWorkTime != null
+          ? ModeType.workEnd
+          : ModeType.workInProgress);
+    }
   }
 }

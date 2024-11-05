@@ -18,4 +18,6 @@ extension DurationExtension on Duration? {
     return '$minutes:$seconds';
   }
 
+  Duration get orZero => this ?? Duration.zero;
+
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:workinax/data/converters/date_time_converter.dart';
 import 'package:workinax/data/converters/duration_converter.dart';
+import 'package:workinax/extension/duration_extension.dart';
 
 part 'work_clock.g.dart';
 
@@ -44,6 +45,8 @@ class WorkClock {
         secondBreakDuration = null;
 
   int get totalHours => (endWorkTime?.hour ?? 0) - (startWorkTime?.hour ?? 0);
+
+  Duration get totalBreakTime => firstBreakDuration.orZero + secondBreakDuration.orZero;
 
   factory WorkClock.fromJson(Map<String, dynamic> json) =>
       _$WorkClockFromJson(json);

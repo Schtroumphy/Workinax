@@ -74,7 +74,7 @@ class WorkClockService {
 
   WorkClockService(this.ref);
 
-  Future<void> insertWorkClock(WorkClock workClock) async {
+  Future<void> saveWorkClock(WorkClock workClock) async {
     final Database db =
         await ref.read(databaseHelperProvider.notifier).database;
 
@@ -110,19 +110,43 @@ class WorkClockService {
     return WorkClock.fromJson(row.first);
   }
 
-  void updateWorkClock({required DateTime date, TimeOfDay? start, TimeOfDay? end, Duration? firstBreakStart, Duration? secondBreakStart,}) async {
-    final Database db = await ref.read(databaseHelperProvider.notifier).database;
+  void setBreak(TimeOfDay? startBreakTime, bool isSecondBreak) {
+    final breakTime =
+        differenceInMinutes(TimeOfDay.now(), startBreakTime ?? TimeOfDay.now());
+    updateWorkClock(
+      date: DateTime.now(),
+      firstBreakStart: isSecondBreak ? null : breakTime,
+      secondBreakStart: isSecondBreak ? breakTime : null,
+    );
+  }
+
+  void setWorkEnd() {
+    updateWorkClock(date: DateTime.now(), end: TimeOfDay.now());
+  }
+
+  void updateWorkClock({
+    required DateTime date,
+    TimeOfDay? start,
+    TimeOfDay? end,
+    Duration? firstBreakStart,
+    Duration? secondBreakStart,
+  }) async {
+    final Database db =
+        await ref.read(databaseHelperProvider.notifier).database;
 
     final Map<String, Object?> valuesToUpdate = {
-      'startWorkTime' : start?.formatTimeOfDay,
-      'endWorkTime' : end?.formatTimeOfDay,
-      'firstBreakDuration' : firstBreakStart.formatShortDuration,
-      'secondBreakDuration' : secondBreakStart.formatShortDuration,
-    }..removeWhere((key, value) => value == null || value == '' || value == '00:00');
+      'startWorkTime': start?.formatTimeOfDay,
+      'endWorkTime': end?.formatTimeOfDay,
+      'firstBreakDuration': firstBreakStart.formatShortDuration,
+      'secondBreakDuration': secondBreakStart.formatShortDuration,
+    }..removeWhere(
+        (key, value) => value == null || value == '' || value == '00:00');
 
-    final formattedValues = valuesToUpdate.keys.map((key) => '$key = ?').join(',');
+    final formattedValues =
+        valuesToUpdate.keys.map((key) => '$key = ?').join(',');
 
-    final sql = 'UPDATE ${WorkClock.tableName} SET $formattedValues WHERE date = ?';
+    final sql =
+        'UPDATE ${WorkClock.tableName} SET $formattedValues WHERE date = ?';
 
     await db.rawUpdate(sql, [...valuesToUpdate.values, date.formatDbDate]);
 

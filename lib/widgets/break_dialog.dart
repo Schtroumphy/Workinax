@@ -6,7 +6,7 @@ import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/rounded_button.dart';
 
 Future<bool?> showBreakDialog(
-    BuildContext context, bool isBreakIn, {TimeOfDay? breakStartTime}) {
+    BuildContext context, { bool isBreakIn = false, TimeOfDay? breakStartTime}) {
   return showDialog<bool>(
     context: context,
     builder: (_) => BreakDialogContent(

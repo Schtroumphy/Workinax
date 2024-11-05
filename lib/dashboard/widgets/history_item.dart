@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extension/duration_extension.dart';
+import 'package:workinax/extension/string_extension.dart';
 import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/rounded_text.dart';
@@ -28,10 +30,9 @@ class HistoryItem extends StatelessWidget {
           ClockIn(
             label: [workClock.startWorkTime, workClock.endWorkTime].formatRange,
           ),
-          Overtime(
-            label: [const TimeOfDay(hour: 12, minute: 30), workClock.endWorkTime].formatHoursDiff,
+          BreakTime(
+            label: workClock.totalBreakTime.formatShortDuration,
           ),
-          //BreakTime(),
           TotalHours(
             label: [workClock.endWorkTime, workClock.startWorkTime].formatHoursDiff,
           ),
@@ -50,7 +51,7 @@ class IconRow extends StatelessWidget {
       this.outlined = false});
 
   final IconData icon;
-  final String label;
+  final String? label;
   final Color? color;
   final bool outlined;
 
@@ -64,7 +65,7 @@ class IconRow extends StatelessWidget {
         const SizedBox(width: 4),
         Flexible(
             child: RoundedText(
-          label,
+          label.orNA,
           color: color,
           outlined: outlined,
         )),
@@ -80,8 +81,8 @@ class ClockIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconRow(
-      icon: Icons.access_time_outlined,
-      label: label ?? 'N/A',
+      icon: Icons.history_toggle_off_rounded,
+      label: label,
     );
   }
 }
@@ -95,7 +96,7 @@ class Overtime extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconRow(
       icon: Icons.more_time_rounded,
-      label: label ?? '1:30',
+      label: label,
       color: AppColor.lightGreen,
       outlined: true,
     );
@@ -111,7 +112,7 @@ class BreakTime extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconRow(
       icon: Icons.coffee_outlined,
-      label: label ?? '1:10',
+      label: label,
       outlined: true,
     );
   }
@@ -125,8 +126,8 @@ class TotalHours extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconRow(
-      icon: Icons.history_toggle_off_rounded,
-      label: label ?? '8:00',
+      icon: Icons.access_time_outlined,
+      label: label,
       outlined: true,
     );
   }

@@ -18,4 +18,11 @@ extension StringTimeExtension on String {
 
     return TimeOfDay(hour: hour, minute: minute);
   }
+
+}
+
+extension StringNullableExtension on String? {
+
+  String get orNA => this ?? 'N/A';
+
 }
