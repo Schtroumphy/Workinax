@@ -7,16 +7,14 @@ class BreakTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const AppText('Durée de la pause '),
-        const SizedBox(
+        AppText('Durée de la pause '),
+        SizedBox(
           width: 8,
         ),
-        TimerFromStartTime(
-          startTime: TimeOfDay.now(),
-        )
+        TimerFromStartTime()
       ],
     );
   }

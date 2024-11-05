@@ -1,6 +1,7 @@
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:workinax/widgets/timer.dart';
 
 class DurationFormField extends FormBuilderField<Duration> {
   DurationFormField({
@@ -15,7 +16,8 @@ class DurationFormField extends FormBuilderField<Duration> {
               onTap: () async {
                 Duration? result = await showDurationPicker(
                   context: field.context,
-                  initialTime: field.value ?? const Duration(hours: 0),
+                  baseUnit: BaseUnit.minute,
+                  initialTime: field.value ?? Duration.zero,
                 );
                 if (result != null) {
                   field.didChange(result);
@@ -29,7 +31,7 @@ class DurationFormField extends FormBuilderField<Duration> {
                 ),
                 child: Text(
                   field.value != null
-                      ? "${field.value!.inHours} h ${field.value!.inMinutes % 60} minutes"
+                      ? "${field.value!.inMinutes} min ${field.value!.inSeconds % 60} s"
                       : "Choisissez une durée",
                 ),
               ),

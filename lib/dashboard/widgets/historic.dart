@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workinax/dashboard/widgets/history_item.dart';
 import 'package:workinax/data/database_helper.dart';
+import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
@@ -27,7 +28,8 @@ class Historic extends ConsumerWidget {
           children: [
             const AppText('Historique', fontSizeType: FontSizeType.large),
             AppClickableText(
-                label: '+ Ajouter une saisie', onClick: () => _onAddWorkClockClick(context)),
+                label: '+ Ajouter une saisie',
+                onClick: () => _onAddWorkClockClick(context)),
           ],
         ),
         const SizedBox(height: 16),
@@ -66,9 +68,20 @@ class Historic extends ConsumerWidget {
                     ),
                     confirmDismiss: (_) async {
                       final current = workClocks[index];
-                      if(current.date == DateTime.now()) return false; // Do not allow today workClock deletion
+                      /** TODO UNCOMMENT
+                       * if (current.date.formatShortDate ==
+                          DateTime.now().formatShortDate) {
 
-                      final shouldDismiss = await _onDismiss(context, ref, current);
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          backgroundColor: AppColor.primaryColor,
+                          content: Text("Tu ne peux pas supprimer la saisie du jour"),
+                          ));
+                          return false;
+                          } // Do not allow today workClock deletion
+                       */
+
+                      final shouldDismiss =
+                          await _onDismiss(context, ref, current);
                       return shouldDismiss ?? false;
                     },
                     child: HistoryItem(current));

@@ -8,6 +8,7 @@ import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/widgets/app_divider.dart';
+import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/edit_duration_field.dart';
 import 'package:workinax/widgets/edit_time_field.dart';
@@ -96,7 +97,7 @@ class EditTimeDialog extends ConsumerWidget {
         ),
       ),
       actions: [
-        RoundedButton(
+        AppOutlinedButton(
           label: 'Annuler',
           onClick: () => _onCancel(context),
         ),

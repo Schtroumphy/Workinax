@@ -42,7 +42,7 @@ class HistoryItem extends StatelessWidget {
                     label: [workClock.startWorkTime, workClock.endWorkTime].formatRange,
                   ),
                   BreakTime(
-                    label: workClock.totalBreakTime.formatShortDuration,
+                    label: workClock.totalBreakTime.formatDuration,
                   ),
                   TotalHours(
                     label: [workClock.endWorkTime, workClock.startWorkTime].formatHoursDiff,

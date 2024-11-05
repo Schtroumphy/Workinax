@@ -32,13 +32,18 @@ class TimerFromStartTimeState extends State<TimerFromStartTime> {
   }
 
   void _startTimer() {
-    if(widget.startTime == null) return;
-    final startDateTime = _timeOfDayToDateTime(widget.startTime!);
+    if (widget.startTime == null) {
+      _elapsedTime = Duration.zero;
+    } else {
+      final startDateTime = _timeOfDayToDateTime(widget.startTime!);
+      final now = DateTime.now();
+
+      _elapsedTime = now.difference(startDateTime);
+    }
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      final now = DateTime.now();
       setState(() {
-        _elapsedTime = now.difference(startDateTime);
+        _elapsedTime += const Duration(seconds: 1);
       });
     });
   }
