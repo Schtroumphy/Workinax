@@ -22,7 +22,7 @@ final getAllProvider = AutoDisposeFutureProvider<List<WorkClock>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetAllRef = AutoDisposeFutureProviderRef<List<WorkClock>>;
-String _$databaseHelperHash() => r'1addb003037cb23cb7ee99f7adb419f25369d354';
+String _$databaseHelperHash() => r'9539e054be8835352409819fe85eea86e73eb8c0';
 
 /// See also [DatabaseHelper].
 @ProviderFor(DatabaseHelper)

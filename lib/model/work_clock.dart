@@ -1,13 +1,23 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:workinax/data/converters/date_time_converter.dart';
 
 part 'work_clock.g.dart';
 
 @JsonSerializable()
 class WorkClock {
+  static const tableName = 'work_clock';
+
   final int? id;
+
+  @DateTimeConverter()
   final DateTime date;
+
+  @DateTimeToTimeConverter()
   final DateTime? startWorkDate;
+
+  @DateTimeToTimeConverter()
   final DateTime? endWorkDate;
+
   final Duration? firstBreakDuration;
   final Duration? secondBreakDuration;
 

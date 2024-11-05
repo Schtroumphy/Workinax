@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/theme/colors.dart';
 
 class TodayRounded extends StatelessWidget {
@@ -12,16 +13,16 @@ class TodayRounded extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         color: AppColor.primaryColor,
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.date_range,
             color: Colors.white,
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Text(
-            'Lun 4 Nov, 2024',
-            style: TextStyle(color: Colors.white),
+            DateTime.now().formatShortDate,
+            style: const TextStyle(color: Colors.white),
           ),
         ],
       ),

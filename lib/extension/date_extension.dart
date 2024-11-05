@@ -1,6 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 extension DateExtension on DateTime {
+  String get formatShortDate {
+    initializeDateFormatting('fr_FR');
+    return DateFormat('EE d MMM, y', 'fr_FR')
+        .format(DateTime.now())
+        .replaceAll('.', '')
+        .split(' ')
+        .map((word) => word[0].toUpperCase() + word.substring(1))
+        .join(' ');
+  }
 
   String get formatDayMonth {
     final DateFormat formatter = DateFormat('dd/MM');
@@ -14,18 +25,24 @@ extension DateExtension on DateTime {
 }
 
 extension DateListExtension on List<DateTime?> {
-
   String get formatRange {
-    if(length != 2 || this[0] == null) return 'N/A';
+    if (length != 2 || this[0] == null) return 'N/A';
 
     return '${this[0]!.formatHoursMinutes} - ${this[1]?.formatHoursMinutes ?? 'N/A'}';
   }
 
   String get formatHoursDiff {
-    if(length != 2 || any((e) => e == null)) return 'N/A';
+    if (length != 2 || any((e) => e == null)) return 'N/A';
 
     final diff = this[0]!.difference(this[1]!);
     return '${diff.inHours}:${diff.inMinutes}';
   }
+}
 
+extension TimeOfDayExtension on TimeOfDay {
+  String get formatTimeOfDay {
+    final hour = this.hour.toString().padLeft(2, '0');
+    final minute = this.minute.toString().padLeft(2, '0');
+    return "$hour:$minute";
+  }
 }

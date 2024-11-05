@@ -15,6 +15,8 @@ Future<List<WorkClock>> getAll(Ref ref) async {
 class DatabaseHelper extends _$DatabaseHelper {
   static Database? _database;
 
+  String path = 'workinax.db';
+
   Future<Database> get database async {
     if (_database != null) {
       return _database!;
@@ -31,18 +33,15 @@ class DatabaseHelper extends _$DatabaseHelper {
   }
 
   Future<Database> initDatabase() async {
-    String path = 'workinax.db';
-    // Open or create the database at the specified path
     return await openDatabase(
       path,
       version: 1,
       onCreate: (Database db, int version) async {
-        // Create the tasks table
         await db.execute('''
         CREATE TABLE work_clock
         (
           id                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-          date                     TEXT,
+          date                     TEXT UNIQUE,
           startWorkDate            TEXT,
           endWorkDate              TEXT DEFAULT NULL,
           firstBreakDuration       INT DEFAULT 0,
@@ -57,7 +56,7 @@ class DatabaseHelper extends _$DatabaseHelper {
     final Database db = await database;
 
     await db.insert(
-      'work_clock',
+      WorkClock.tableName,
       workClock.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -66,8 +65,9 @@ class DatabaseHelper extends _$DatabaseHelper {
   Future<List<WorkClock>> getAllWorkClock() async {
     final Database db = await database;
 
-    final rows = await db.query('work_clock');
+    final rows = await db.query(WorkClock.tableName);
 
     return rows.map((row) => WorkClock.fromJson(row)).toList();
   }
+
 }
