@@ -6,6 +6,7 @@ import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
+import 'package:workinax/theme/insets.dart';
 import 'package:workinax/widgets/app_divider.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/edit_duration_field.dart';
@@ -54,20 +55,20 @@ class EditTimeDialog extends ConsumerWidget {
               initialValue: _getDateTimeFromDateAndTime(
                   workClock.date, workClock.startWorkTime),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: Insets.l),
             EditTimeField(
               name: clockOutField,
               title: "J'ai débauché à",
               initialValue: _getDateTimeFromDateAndTime(
                   workClock.date, workClock.endWorkTime),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: Insets.l),
             EditDurationField(
               name: break1Field,
               title: "Pause 1",
               initialValue: workClock.firstBreakDuration.orZero,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: Insets.l),
             EditDurationField(
               name: break2Field,
               title: "Pause 2",

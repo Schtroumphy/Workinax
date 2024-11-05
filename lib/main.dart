@@ -7,19 +7,19 @@ void main() {
 
   runApp(const ProviderScope(
     child: MaterialApp(
-      home: MyApp(),
+      home: WorkinaxApp(),
     ),
   ));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class WorkinaxApp extends StatefulWidget {
+  const WorkinaxApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<WorkinaxApp> createState() => _WorkinaxAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _WorkinaxAppState extends State<WorkinaxApp> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

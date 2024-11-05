@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workinax/theme/insets.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/rounded_button.dart';
 
@@ -26,7 +27,7 @@ class ActionButtonRow extends StatelessWidget {
           onClick: onBreakClick,
         )),
         if (secondButtonLabel != null) ...[
-          const SizedBox(width: 8),
+          const SizedBox(width: Insets.m),
           Expanded(
             child: AppOutlinedButton(
               label: secondButtonLabel!,

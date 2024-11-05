@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workinax/theme/insets.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/rounded_button.dart';
 
@@ -14,10 +15,10 @@ class ClockInCard extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 10 / 4,
         child: Card(
-          elevation: 8,
+          elevation: Insets.m,
           color: Colors.white,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(Insets.l),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

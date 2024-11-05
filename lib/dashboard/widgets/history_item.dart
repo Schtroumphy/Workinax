@@ -4,6 +4,7 @@ import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/extension/string_extension.dart';
 import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
+import 'package:workinax/theme/insets.dart';
 import 'package:workinax/widgets/edit_time_dialog.dart';
 import 'package:workinax/widgets/rounded_text.dart';
 
@@ -21,7 +22,7 @@ class HistoryItem extends StatelessWidget {
           border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: Insets.m, vertical: Insets.l),
         margin: const EdgeInsets.only(bottom: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
