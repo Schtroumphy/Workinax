@@ -28,7 +28,7 @@ class ActionHeader extends ConsumerWidget {
       ModeType.notStarted => ClockInCard(onClockInClick: onClockInClick),
       ModeType.workInProgress => ActionButtonRow(
           firstButtonLabel: 'Prendre une pause',
-          onBreakClick: () => onBreakInClick,
+          onBreakClick: onBreakInClick,
           secondButtonLabel: 'Débaucher',
           onClockOutClick: onClockOutClick,
         ),

@@ -5,6 +5,7 @@ import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/extension/time_of_day_extension.dart';
 import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
+import 'package:workinax/theme/insets.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/async_value_widget.dart';
@@ -20,10 +21,7 @@ class AsyncWorkTimesCard extends ConsumerWidget {
     final todayWC = ref.watch(getTodayWorkClockProvider);
     return AsyncValueWidget<WorkClock?>(
       value: todayWC,
-      data: (wc) => AspectRatio(
-        aspectRatio: 10 / 4,
-        child: wc == null ? const Text('No WorkClock found') : WorkTimesCard(workClock: wc),
-      ),
+      data: (wc) => wc == null ? const Text('No WorkClock found') : WorkTimesCard(workClock: wc),
     );
   }
 }
@@ -39,7 +37,7 @@ class WorkTimesCard extends StatelessWidget {
       shadowColor: Colors.transparent,
       color: AppColor.lightBlue,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(Insets.l),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -61,29 +59,38 @@ class WorkTimesCard extends StatelessWidget {
                     : TimerFromStartTime(startTime: workClock.startWorkTime),
               ],
             ),
+            const SizedBox(height: Insets.m),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                IconColumn(
-                    icon: Icons.share_arrival_time_outlined,
-                    label: workClock.startWorkTime?.formatTimeOfDay ?? 'N/A',
-                    subtitle: 'Embauché'),
-                IconColumn(
-                  icon: Icons.coffee,
-                  label:
-                      workClock.firstBreakDuration?.formatShortDuration ?? '-',
-                  subtitle: 'Pause',
+                Flexible(
+                  child: IconColumn(
+                      icon: Icons.share_arrival_time_outlined,
+                      label: workClock.startWorkTime?.formatTimeOfDay ?? 'N/A',
+                      subtitle: 'Embauché'),
                 ),
-                IconColumn(
-                  icon: Icons.coffee,
-                  label: workClock.secondBreakDuration?.formatShortDuration ??
-                      '-',
-                  subtitle: 'Pause',
+                Flexible(
+                  child: IconColumn(
+                    icon: Icons.coffee,
+                    label:
+                        workClock.firstBreakDuration?.formatShortDuration ?? '-',
+                    subtitle: 'Pause',
+                  ),
                 ),
-                IconColumn(
-                  icon: Icons.exit_to_app,
-                  label: workClock.endWorkTime?.formatTimeOfDay ?? 'N/A',
-                  subtitle: 'Débauché',
+                Flexible(
+                  child: IconColumn(
+                    icon: Icons.coffee,
+                    label: workClock.secondBreakDuration?.formatShortDuration ??
+                        '-',
+                    subtitle: 'Pause',
+                  ),
+                ),
+                Flexible(
+                  child: IconColumn(
+                    icon: Icons.exit_to_app,
+                    label: workClock.endWorkTime?.formatTimeOfDay ?? 'N/A',
+                    subtitle: 'Débauché',
+                  ),
                 ),
               ],
             )

@@ -14,10 +14,10 @@ class AppText extends StatelessWidget {
       label,
       style: TextStyle(
           fontSize: switch (fontSizeType) {
-            FontSizeType.small => 14,
-            FontSizeType.medium => 16,
-            FontSizeType.large => 20,
-            null => 16,
+            FontSizeType.small => 12,
+            FontSizeType.medium => 14,
+            FontSizeType.large => 18,
+            null => 14,
           },
           color: color ?? AppColor.black,
           fontStyle: switch (fontSizeType) {

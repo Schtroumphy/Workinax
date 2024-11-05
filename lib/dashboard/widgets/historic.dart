@@ -66,8 +66,9 @@ class Historic extends ConsumerWidget {
                     ),
                     confirmDismiss: (_) async {
                       final current = workClocks[index];
-                      final shouldDismiss =
-                          await _onDismiss(context, ref, current);
+                      if(current.date == DateTime.now()) return false; // Do not allow today workClock deletion
+
+                      final shouldDismiss = await _onDismiss(context, ref, current);
                       return shouldDismiss ?? false;
                     },
                     child: HistoryItem(current));

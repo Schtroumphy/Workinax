@@ -11,15 +11,13 @@ class AppImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AspectRatio(
-            aspectRatio: 4 / 5,
-            child: switch (mode) {
-              ModeType.workInProgress =>
-                Image.asset('assets/images/working_rounded.png'),
-              ModeType.breakInProgress => //
-                Image.asset('assets/images/coffe.png'),
-              _ => const SizedBox.shrink(),
-            }),
+        switch (mode) {
+          ModeType.workInProgress =>
+            Image.asset('assets/images/working_rounded.png'),
+          ModeType.breakInProgress => //
+            Image.asset('assets/images/coffee.png'),
+          _ => const SizedBox.shrink(),
+        },
         if(mode == ModeType.breakInProgress)
           const BreakTimer()
       ],

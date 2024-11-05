@@ -18,27 +18,37 @@ class HistoryItem extends StatelessWidget {
     return InkWell(
       onTap: () => _onTap(context, workClock),
       child: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: Insets.m, vertical: Insets.l),
+        padding: const EdgeInsets.symmetric(horizontal: Insets.m, vertical: Insets.m),
         margin: const EdgeInsets.only(bottom: 12),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RoundedText(
               workClock.date.formatDayMonth,
               color: AppColor.lightBlue,
             ),
-            ClockIn(
-              label: [workClock.startWorkTime, workClock.endWorkTime].formatRange,
-            ),
-            BreakTime(
-              label: workClock.totalBreakTime.formatShortDuration,
-            ),
-            TotalHours(
-              label: [workClock.endWorkTime, workClock.startWorkTime].formatHoursDiff,
+            const SizedBox(width: Insets.m,),
+            Expanded(
+              child: Wrap(
+                spacing: Insets.m,
+                runSpacing: Insets.m,
+                children: [
+                  ClockIn(
+                    label: [workClock.startWorkTime, workClock.endWorkTime].formatRange,
+                  ),
+                  BreakTime(
+                    label: workClock.totalBreakTime.formatShortDuration,
+                  ),
+                  TotalHours(
+                    label: [workClock.endWorkTime, workClock.startWorkTime].formatHoursDiff,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

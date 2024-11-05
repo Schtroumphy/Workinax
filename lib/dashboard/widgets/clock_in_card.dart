@@ -12,26 +12,26 @@ class ClockInCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
-      child: AspectRatio(
-        aspectRatio: 10 / 4,
-        child: Card(
-          elevation: Insets.m,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(Insets.l),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const AppText("Let's go to work !"),
-                SizedBox(
-                    width: double.infinity,
-                    child: RoundedButton(
-                      label: 'Embaucher',
-                      onClick: onClockInClick,
-                    )),
-                const AppText("Ton temps de travail sera renseigné ici."),
-              ],
-            ),
+      child: Card(
+        elevation: Insets.m,
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(Insets.l),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const AppText("Let's go to work !"),
+              const SizedBox(height: Insets.m),
+              SizedBox(
+                width: double.infinity,
+                child: RoundedButton(
+                  label: 'Embaucher',
+                  onClick: onClockInClick,
+                ),
+              ),
+              const SizedBox(height: Insets.m),
+              const AppText("Ton temps de travail sera renseigné ici."),
+            ],
           ),
         ),
       ),

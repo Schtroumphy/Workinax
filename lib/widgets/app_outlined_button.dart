@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workinax/theme/insets.dart';
 
 import '../theme/colors.dart';
 
@@ -13,7 +14,7 @@ class AppOutlinedButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onClick,
       style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: Insets.m),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -23,7 +24,7 @@ class AppOutlinedButton extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          fontSize: 16,
+          fontSize: 14,
           color: AppColor.primaryColor,
         ),
       ),
