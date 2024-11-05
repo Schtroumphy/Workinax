@@ -152,4 +152,11 @@ class WorkClockService {
 
     ref.invalidateSelf();
   }
+
+  void deleteById(int id) async {
+    final Database db =
+        await ref.read(databaseHelperProvider.notifier).database;
+
+    await db.delete(WorkClock.tableName, where: 'id = ?', whereArgs: [id]);
+  }
 }
