@@ -3,9 +3,11 @@ import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/duration_form_field.dart';
 
 class EditDurationField extends StatefulWidget {
-  const EditDurationField({super.key, required this.title});
+  const EditDurationField({super.key, required this.title, required this.initialValue, required this.name});
 
+  final String name;
   final String title;
+  final Duration initialValue;
 
   @override
   State<EditDurationField> createState() => _EditDurationFieldState();
@@ -21,8 +23,8 @@ class _EditDurationFieldState extends State<EditDurationField> {
       children: [
         AppText(widget.title),
         DurationFormField(
-          name: widget.title,
-          initialValue: const Duration(minutes: 15),
+          name: widget.name,
+          initialValue: widget.initialValue,
         ),
       ],
     );

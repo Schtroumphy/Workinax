@@ -46,10 +46,29 @@ class WorkClock {
 
   int get totalHours => (endWorkTime?.hour ?? 0) - (startWorkTime?.hour ?? 0);
 
-  Duration get totalBreakTime => firstBreakDuration.orZero + secondBreakDuration.orZero;
+  Duration get totalBreakTime =>
+      firstBreakDuration.orZero + secondBreakDuration.orZero;
 
   factory WorkClock.fromJson(Map<String, dynamic> json) =>
       _$WorkClockFromJson(json);
 
   Map<String, dynamic> toJson() => _$WorkClockToJson(this);
+
+  WorkClock copyWith({
+    int? id,
+    DateTime? date,
+    TimeOfDay? startWorkTime,
+    TimeOfDay? endWorkTime,
+    Duration? firstBreakDuration,
+    Duration? secondBreakDuration,
+  }) {
+    return WorkClock(
+      id: id ?? this.id,
+      date: date ?? this.date,
+      startWorkTime: startWorkTime ?? this.startWorkTime,
+      endWorkTime: endWorkTime ?? this.endWorkTime,
+      firstBreakDuration: firstBreakDuration ?? this.firstBreakDuration,
+      secondBreakDuration: secondBreakDuration ?? this.secondBreakDuration,
+    );
+  }
 }

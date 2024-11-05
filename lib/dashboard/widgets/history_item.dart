@@ -4,6 +4,7 @@ import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/extension/string_extension.dart';
 import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
+import 'package:workinax/widgets/edit_time_dialog.dart';
 import 'package:workinax/widgets/rounded_text.dart';
 
 class HistoryItem extends StatelessWidget {
@@ -13,32 +14,39 @@ class HistoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          RoundedText(
-            workClock.date.formatDayMonth,
-            color: AppColor.lightBlue,
-          ),
-          ClockIn(
-            label: [workClock.startWorkTime, workClock.endWorkTime].formatRange,
-          ),
-          BreakTime(
-            label: workClock.totalBreakTime.formatShortDuration,
-          ),
-          TotalHours(
-            label: [workClock.endWorkTime, workClock.startWorkTime].formatHoursDiff,
-          ),
-        ],
+    return InkWell(
+      onTap: () => _onTap(context, workClock),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        margin: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            RoundedText(
+              workClock.date.formatDayMonth,
+              color: AppColor.lightBlue,
+            ),
+            ClockIn(
+              label: [workClock.startWorkTime, workClock.endWorkTime].formatRange,
+            ),
+            BreakTime(
+              label: workClock.totalBreakTime.formatShortDuration,
+            ),
+            TotalHours(
+              label: [workClock.endWorkTime, workClock.startWorkTime].formatHoursDiff,
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  _onTap(BuildContext context, WorkClock workClock) {
+    showEditTimeDialog(context, workClock);
   }
 }
 

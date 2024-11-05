@@ -3,8 +3,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:workinax/widgets/app_text.dart';
 
 class EditTimeField extends StatefulWidget {
-  const EditTimeField({super.key, required this.title, this.initialValue});
+  const EditTimeField({super.key, required this.title, this.initialValue, required this.name});
 
+  final String name;
   final String title;
   final DateTime? initialValue;
 
@@ -21,7 +22,7 @@ class _EditTimeFieldState extends State<EditTimeField> {
       children: [
         AppText(widget.title),
         FormBuilderDateTimePicker(
-          name: widget.title,
+          name: widget.name,
           initialValue: widget.initialValue ?? DateTime.now(),
           initialDatePickerMode: DatePickerMode.day,
           inputType: InputType.time,

@@ -11,7 +11,7 @@ extension DateExtension on DateTime {
   String get formatShortDate {
     initializeDateFormatting(AppDateFormat.locale);
     return AppDateFormat.mediumDateFormat
-        .format(AppDateFormat.now)
+        .format(this)
         .replaceAll('.', '')
         .split(' ')
         .map((word) => word[0].toUpperCase() + word.substring(1))
@@ -22,6 +22,7 @@ extension DateExtension on DateTime {
 
   String get formatHoursMinutes => AppDateFormat.shortHourMinute.format(this);
 
+  TimeOfDay get toTimeOfDay => TimeOfDay(hour: hour, minute: minute);
 }
 
 extension DateListExtension on List<TimeOfDay?> {
