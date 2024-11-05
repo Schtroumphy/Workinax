@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:workinax/data/converters/date_time_converter.dart';
+import 'package:workinax/data/converters/duration_converter.dart';
 
 part 'work_clock.g.dart';
 
@@ -19,7 +20,10 @@ class WorkClock {
   @TimeOfDayConverter()
   final TimeOfDay? endWorkTime;
 
+  @DurationConverter()
   final Duration? firstBreakDuration;
+
+  @DurationConverter()
   final Duration? secondBreakDuration;
 
   WorkClock({

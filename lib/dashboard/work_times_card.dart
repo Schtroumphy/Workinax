@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:workinax/data/converters/date_time_converter.dart';
-import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/extension/time_of_day_extension.dart';
 import 'package:workinax/model/work_clock.dart';
@@ -11,7 +7,6 @@ import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/edit_time_dialog.dart';
 import 'package:workinax/widgets/icon_column.dart';
-import 'package:workinax/widgets/rounded_text.dart';
 import 'package:workinax/widgets/timer.dart';
 
 class WorkTimesCard extends StatelessWidget {
@@ -39,15 +34,17 @@ class WorkTimesCard extends StatelessWidget {
                       : 'Travail en cours ...',
                   fontSizeType: FontSizeType.medium,
                 ),
-                workClock?.endWorkTime != null ? AppOutlinedButton(
-                  label: 'Modifier',
-                  onClick: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => const EditTimeDialog(),
-                    );
-                  },
-                ) : TimerFromStartTime(startTime: workClock?.startWorkTime),
+                workClock?.endWorkTime != null
+                    ? AppOutlinedButton(
+                        label: 'Modifier',
+                        onClick: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => const EditTimeDialog(),
+                          );
+                        },
+                      )
+                    : TimerFromStartTime(startTime: workClock?.startWorkTime),
               ],
             ),
             Row(
@@ -59,15 +56,17 @@ class WorkTimesCard extends StatelessWidget {
                     subtitle: 'Embauché'),
                 IconColumn(
                   icon: Icons.coffee,
-                  label: workClock?.firstBreakDuration?.inMinutes.toString() ?? '-',
+                  label:
+                      workClock?.firstBreakDuration?.formatShortDuration ?? '-',
                   subtitle: 'Pause',
                 ),
                 IconColumn(
                   icon: Icons.coffee,
-                  label: workClock?.firstBreakDuration?.inMinutes.toString() ?? '-',
+                  label: workClock?.secondBreakDuration?.formatShortDuration ??
+                      '-',
                   subtitle: 'Pause',
                 ),
-                  IconColumn(
+                IconColumn(
                   icon: Icons.exit_to_app,
                   label: workClock?.endWorkTime.formatTimeOfDay ?? 'N/A',
                   subtitle: 'Débauché',

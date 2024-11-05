@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/extension/time_of_day_extension.dart';
 import 'package:workinax/model/work_clock.dart';
 
@@ -109,13 +110,15 @@ class WorkClockService {
     return WorkClock.fromJson(row.first);
   }
 
-  void updateWorkClock({required DateTime date, TimeOfDay? start, TimeOfDay? end}) async {
+  void updateWorkClock({required DateTime date, TimeOfDay? start, TimeOfDay? end, Duration? firstBreakStart, Duration? secondBreakStart,}) async {
     final Database db = await ref.read(databaseHelperProvider.notifier).database;
 
     final Map<String, Object?> valuesToUpdate = {
       'startWorkTime' : start?.formatTimeOfDay,
       'endWorkTime' : end?.formatTimeOfDay,
-    }..removeWhere((key, value) => value == null || value == '');
+      'firstBreakDuration' : firstBreakStart.formatShortDuration,
+      'secondBreakDuration' : secondBreakStart.formatShortDuration,
+    }..removeWhere((key, value) => value == null || value == '' || value == '00:00');
 
     final formattedValues = valuesToUpdate.keys.map((key) => '$key = ?').join(',');
 

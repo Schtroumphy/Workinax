@@ -26,3 +26,13 @@ String timeDifference(TimeOfDay t1, TimeOfDay t2) {
   // Formater la chaîne au format HH:mm
   return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
 }
+
+
+Duration differenceInMinutes(TimeOfDay time1, TimeOfDay time2) {
+  int minutes1 = time1.hour * 60 + time1.minute;
+  int minutes2 = time2.hour * 60 + time2.minute;
+
+  int differenceInMinutes = (minutes2 - minutes1).abs(); // Utilise abs() pour obtenir une valeur positive
+
+  return Duration(minutes: differenceInMinutes);
+}

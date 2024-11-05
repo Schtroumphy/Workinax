@@ -13,13 +13,10 @@ WorkClock _$WorkClockFromJson(Map<String, dynamic> json) => WorkClock(
           json['startWorkTime'], const TimeOfDayConverter().fromJson),
       endWorkTime: _$JsonConverterFromJson<String, TimeOfDay>(
           json['endWorkTime'], const TimeOfDayConverter().fromJson),
-      firstBreakDuration: json['firstBreakDuration'] == null
-          ? null
-          : Duration(microseconds: (json['firstBreakDuration'] as num).toInt()),
-      secondBreakDuration: json['secondBreakDuration'] == null
-          ? null
-          : Duration(
-              microseconds: (json['secondBreakDuration'] as num).toInt()),
+      firstBreakDuration: _$JsonConverterFromJson<String, Duration>(
+          json['firstBreakDuration'], const DurationConverter().fromJson),
+      secondBreakDuration: _$JsonConverterFromJson<String, Duration>(
+          json['secondBreakDuration'], const DurationConverter().fromJson),
     );
 
 Map<String, dynamic> _$WorkClockToJson(WorkClock instance) => <String, dynamic>{
@@ -29,8 +26,10 @@ Map<String, dynamic> _$WorkClockToJson(WorkClock instance) => <String, dynamic>{
           instance.startWorkTime, const TimeOfDayConverter().toJson),
       'endWorkTime': _$JsonConverterToJson<String, TimeOfDay>(
           instance.endWorkTime, const TimeOfDayConverter().toJson),
-      'firstBreakDuration': instance.firstBreakDuration?.inMicroseconds,
-      'secondBreakDuration': instance.secondBreakDuration?.inMicroseconds,
+      'firstBreakDuration': _$JsonConverterToJson<String, Duration>(
+          instance.firstBreakDuration, const DurationConverter().toJson),
+      'secondBreakDuration': _$JsonConverterToJson<String, Duration>(
+          instance.secondBreakDuration, const DurationConverter().toJson),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

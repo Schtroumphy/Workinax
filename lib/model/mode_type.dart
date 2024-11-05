@@ -8,4 +8,7 @@ enum ModeType {
     workInProgress,
     breakInProgress,
   ];
+
+  bool get isNotWorking => !working.contains(this);
+  bool get isWorking => working.contains(this);
 }
