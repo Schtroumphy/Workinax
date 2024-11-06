@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/dashboard/dashboard_content.dart';
+import 'package:workinax/time_entry/presentation/dashboard/dashboard_content.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

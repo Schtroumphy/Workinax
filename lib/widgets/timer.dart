@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/rounded_text.dart';
 
 class TimerFromStartTime extends StatefulWidget {
-  final TimeOfDay? startTime;
+  final DateTime? startTime;
 
   const TimerFromStartTime({super.key, this.startTime});
 
@@ -32,12 +31,12 @@ class TimerFromStartTimeState extends State<TimerFromStartTime> {
   }
 
   void _startTimer() {
-    if (widget.startTime == null) {
+    final startDateTime = widget.startTime;
+
+    if (startDateTime == null) {
       _elapsedTime = Duration.zero;
     } else {
-      final startDateTime = _timeOfDayToDateTime(widget.startTime!);
       final now = DateTime.now();
-
       _elapsedTime = now.difference(startDateTime);
     }
 
@@ -46,11 +45,6 @@ class TimerFromStartTimeState extends State<TimerFromStartTime> {
         _elapsedTime += const Duration(seconds: 1);
       });
     });
-  }
-
-  DateTime _timeOfDayToDateTime(TimeOfDay timeOfDay) {
-    final now = DateTime.now();
-    return DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
   }
 
   @override

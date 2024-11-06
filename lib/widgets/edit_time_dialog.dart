@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/data/database_helper.dart';
 import 'package:workinax/extension/date_extension.dart';
-import 'package:workinax/extension/duration_extension.dart';
-import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
+import 'package:workinax/time_entry/domain/time_entry_model.dart';
 import 'package:workinax/widgets/app_divider.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
-import 'package:workinax/widgets/edit_duration_field.dart';
 import 'package:workinax/widgets/edit_time_field.dart';
 import 'package:workinax/widgets/rounded_button.dart';
 
@@ -20,23 +17,23 @@ const clockOutField = 'clock_out';
 const break1Field = 'break_1';
 const break2Field = 'break_2';
 
-void showEditTimeDialog(BuildContext context, WorkClock workClock) {
+void showEditTimeDialog(BuildContext context, TimeEntryModel timeEntry) {
   showDialog(
     context: context,
-    builder: (_) => EditTimeDialog(workClock: workClock),
+    builder: (_) => EditTimeDialog(timeEntry: timeEntry),
   );
 }
 
 class EditTimeDialog extends ConsumerWidget {
   static final _formKey = GlobalKey<FormBuilderState>();
 
-  const EditTimeDialog({super.key, required this.workClock});
+  const EditTimeDialog({super.key, required this.timeEntry});
 
-  final WorkClock workClock;
+  final TimeEntryModel timeEntry;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final addTimeMode = workClock.id == null;
+    final addTimeMode = timeEntry.id == null;
 
     return AlertDialog(
       title: AppText(
@@ -53,9 +50,9 @@ class EditTimeDialog extends ConsumerWidget {
                     name: dateField,
                     title: "Date de saisie",
                     initialValue: null,
-              isTimeOnly: false,
+                    isTimeOnly: false,
                   )
-                : AppText(workClock.date.formatShortDate),
+                : AppText(timeEntry.startTime.formatShortDate),
             const SizedBox(
               height: 8,
             ),
@@ -63,36 +60,30 @@ class EditTimeDialog extends ConsumerWidget {
             EditTimeField(
               name: clockInField,
               title: "J'ai embauché à",
-              initialValue: addTimeMode
-                  ? null
-                  : _getDateTimeFromDateAndTime(
-                      workClock.date, workClock.startWorkTime),
+              initialValue: addTimeMode ? null : timeEntry.startTime,
             ),
             const SizedBox(height: Insets.l),
             EditTimeField(
               name: clockOutField,
               title: "J'ai débauché à",
-              initialValue: addTimeMode
-                  ? null
-                  : _getDateTimeFromDateAndTime(
-                      workClock.date, workClock.endWorkTime),
+              initialValue: addTimeMode ? null : timeEntry.endTime,
             ),
             const SizedBox(height: Insets.l),
-            EditDurationField(
-              name: break1Field,
-              title: "Pause 1",
-              initialValue: addTimeMode
-                  ? Duration.zero
-                  : workClock.firstBreakDuration.orZero,
-            ),
-            const SizedBox(height: Insets.l),
-            EditDurationField(
-              name: break2Field,
-              title: "Pause 2",
-              initialValue: addTimeMode
-                  ? Duration.zero
-                  : workClock.secondBreakDuration.orZero,
-            ),
+            // EditDurationField(
+            //   name: break1Field,
+            //   title: "Pause 1",
+            //   initialValue: addTimeMode
+            //       ? Duration.zero
+            //       : timeEntry.firstBreakDuration.orZero,
+            // ),
+            // const SizedBox(height: Insets.l),
+            // EditDurationField(
+            //   name: break2Field,
+            //   title: "Pause 2",
+            //   initialValue: addTimeMode
+            //       ? Duration.zero
+            //       : timeEntry.secondBreakDuration.orZero,
+            // ),
           ],
         ),
       ),
@@ -118,20 +109,18 @@ class EditTimeDialog extends ConsumerWidget {
 
     if (state == null || state.isValid == false) return;
 
-    final newWC = workClock.copyWith(
-      date: (state.fields[dateField]?.value as DateTime?),
-      startWorkTime: (state.fields[clockInField]?.value as DateTime?)?.toTimeOfDay,
-      endWorkTime: (state.fields[clockOutField]?.value as DateTime?)?.toTimeOfDay,
-      firstBreakDuration: state.fields[break1Field]?.value as Duration?,
-      secondBreakDuration: state.fields[break2Field]?.value as Duration?,
-    );
-
-    ref.read(workClockServiceProvider).saveWorkClock(newWC);
+    // final newWC = timeEntry.copyWith(
+    //   date: (state.fields[dateField]?.value as DateTime?),
+    //   startTime:
+    //       (state.fields[clockInField]?.value as DateTime?)?.toTimeOfDay,
+    //   endTime:
+    //       (state.fields[clockOutField]?.value as DateTime?)?.toTimeOfDay,
+    //   firstBreakDuration: state.fields[break1Field]?.value as Duration?,
+    //   secondBreakDuration: state.fields[break2Field]?.value as Duration?,
+    // );
+    //
+    // ref.read(workClockServiceProvider).save(newWC);
 
     Navigator.pop(context);
-  }
-
-  DateTime _getDateTimeFromDateAndTime(DateTime date, TimeOfDay? time) {
-    return date.copyWith(hour: time?.hour, minute: time?.minute);
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/dashboard/widgets/history_item.dart';
-import 'package:workinax/data/database_helper.dart';
 import 'package:workinax/extension/date_extension.dart';
-import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
+import 'package:workinax/time_entry/domain/time_entry_model.dart';
+import 'package:workinax/time_entry/presentation/historic/historic_controller.dart';
+import 'package:workinax/time_entry/widgets/history_item.dart';
 import 'package:workinax/widgets/app_divider.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
@@ -18,7 +18,7 @@ class Historic extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final workClocks = ref.watch(getAllProvider);
+    final entries = ref.watch(historicControllerProvider);
 
     return Column(
       children: [
@@ -34,9 +34,9 @@ class Historic extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         AsyncValueWidget(
-          value: workClocks,
-          data: (workClocks) {
-            if (workClocks.isEmpty) {
+          value: entries,
+          data: (timeEntries) {
+            if (timeEntries.isEmpty) {
               return const AppText(
                 'No data yet',
                 color: Colors.grey,
@@ -44,9 +44,9 @@ class Historic extends ConsumerWidget {
             }
             return ListView.builder(
               shrinkWrap: true,
-              itemCount: workClocks.length,
+              itemCount: timeEntries.length,
               itemBuilder: (context, index) {
-                final current = workClocks[index];
+                final current = timeEntries[index];
                 return Dismissible(
                     key: Key(current.id?.toString() ?? ''),
                     background: Container(
@@ -67,8 +67,8 @@ class Historic extends ConsumerWidget {
                       ),
                     ),
                     confirmDismiss: (_) async {
-                      final current = workClocks[index];
-                      if (current.date.formatShortDate ==
+                      final current = timeEntries[index];
+                      if (current.startTime.formatShortDate ==
                           DateTime.now().formatShortDate) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
@@ -93,17 +93,17 @@ class Historic extends ConsumerWidget {
   }
 
   _onAddWorkClockClick(BuildContext context) {
-    showEditTimeDialog(context, WorkClock.newOne());
+    showEditTimeDialog(context, TimeEntryModel.init());
   }
 
   Future<bool?> _onDismiss(
-      BuildContext context, WidgetRef ref, WorkClock workClock) async {
-    return await showRemoveDialog(context, ref, workClock.id);
+      BuildContext context, WidgetRef ref, TimeEntryModel timeEntry) async {
+    return await showRemoveDialog(context, ref, timeEntry.id);
   }
 }
 
 Future<bool?> showRemoveDialog(
-    BuildContext context, WidgetRef ref, int? workClockId) async {
+    BuildContext context, WidgetRef ref, int? entryId) async {
   return await showDialog<bool?>(
           context: context,
           builder: (_) {
@@ -120,12 +120,12 @@ Future<bool?> showRemoveDialog(
                 ),
                 RoundedButton(
                   label: 'Confirmer',
-                  onClick: workClockId == null
+                  onClick: entryId == null
                       ? null
                       : () {
                           ref
-                              .read(workClockServiceProvider)
-                              .deleteById(workClockId);
+                              .read(historicControllerProvider.notifier)
+                              .delete(entryId);
                           Navigator.pop(context, true);
                         },
                 ),

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/data/database_helper.dart';
-import 'package:workinax/extension/duration_extension.dart';
-import 'package:workinax/extension/time_of_day_extension.dart';
-import 'package:workinax/model/work_clock.dart';
+import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
+import 'package:workinax/time_entry/application/today_entry.dart';
+import 'package:workinax/time_entry/domain/time_entry_model.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/async_value_widget.dart';
@@ -18,18 +17,20 @@ class AsyncWorkTimesCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todayWC = ref.watch(getTodayWorkClockProvider);
-    return AsyncValueWidget<WorkClock?>(
+    final todayWC = ref.watch(todayEntryProvider);
+    return AsyncValueWidget<TimeEntryModel?>(
       value: todayWC,
-      data: (wc) => wc == null ? const Text('No WorkClock found') : WorkTimesCard(workClock: wc),
+      data: (wc) => wc == null
+          ? const Text('No Time entry found')
+          : WorkTimesCard(timeEntry: wc),
     );
   }
 }
 
 class WorkTimesCard extends StatelessWidget {
-  const WorkTimesCard({super.key, required this.workClock});
+  const WorkTimesCard({super.key, required this.timeEntry});
 
-  final WorkClock workClock;
+  final TimeEntryModel timeEntry;
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +47,17 @@ class WorkTimesCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppText(
-                  workClock.endWorkTime != null
+                  timeEntry.endTime != null
                       ? 'Temps de travail du jour'
                       : 'Travail en cours ...',
                   fontSizeType: FontSizeType.medium,
                 ),
-                workClock.endWorkTime != null
+                timeEntry.endTime != null
                     ? AppOutlinedButton(
                         label: 'Modifier',
                         onClick: () => _onEditClick(context),
                       )
-                    : TimerFromStartTime(startTime: workClock.startWorkTime),
+                    : TimerFromStartTime(startTime: timeEntry.startTime),
               ],
             ),
             const SizedBox(height: Insets.m),
@@ -66,29 +67,27 @@ class WorkTimesCard extends StatelessWidget {
                 Flexible(
                   child: IconColumn(
                       icon: Icons.share_arrival_time_outlined,
-                      label: workClock.startWorkTime?.formatTimeOfDay ?? 'N/A',
+                      label: timeEntry.startTime.formatHoursMinutes,
                       subtitle: 'Embauché'),
                 ),
-                Flexible(
-                  child: IconColumn(
-                    icon: Icons.coffee,
-                    label:
-                        workClock.firstBreakDuration?.formatShortDuration ?? '-',
-                    subtitle: 'Pause',
-                  ),
-                ),
-                Flexible(
-                  child: IconColumn(
-                    icon: Icons.coffee,
-                    label: workClock.secondBreakDuration?.formatShortDuration ??
-                        '-',
-                    subtitle: 'Pause',
-                  ),
-                ),
+                // Flexible(
+                //   child: IconColumn(
+                //     icon: Icons.coffee,
+                //     label: timeEntry.breaks.first.duration.formatShortDuration,
+                //     subtitle: 'Pause',
+                //   ),
+                // ),
+                // Flexible(
+                //   child: IconColumn(
+                //     icon: Icons.coffee,
+                //     label: timeEntry.breaks.first.duration.formatShortDuration,
+                //     subtitle: 'Pause',
+                //   ),
+                // ),
                 Flexible(
                   child: IconColumn(
                     icon: Icons.exit_to_app,
-                    label: workClock.endWorkTime?.formatTimeOfDay ?? 'N/A',
+                    label: timeEntry.endTime?.formatHoursMinutes ?? 'N/A',
                     subtitle: 'Débauché',
                   ),
                 ),
@@ -101,6 +100,6 @@ class WorkTimesCard extends StatelessWidget {
   }
 
   _onEditClick(BuildContext context) {
-    showEditTimeDialog(context, workClock);
+    showEditTimeDialog(context, timeEntry);
   }
 }

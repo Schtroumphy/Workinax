@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/dashboard/application/timer_notifier.dart';
-import 'package:workinax/dashboard/widgets/history_item.dart';
-import 'package:workinax/extension/date_extension.dart';
-import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/rounded_button.dart';
 
-Future<bool?> showBreakDialog(
-    BuildContext context, { bool isBreakIn = false}) {
+Future<bool?> showBreakDialog(BuildContext context, {bool isBreakIn = false}) {
   return showDialog<bool>(
     context: context,
     builder: (_) => BreakDialogContent(
@@ -26,7 +21,7 @@ class BreakDialogContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final duration = ref.read(timerNotifierProvider).formatShortDuration;
+    //final duration = ref.read(timerNotifierProvider).formatShortDuration;
     return AlertDialog(
       title: Center(
         child: AppText(

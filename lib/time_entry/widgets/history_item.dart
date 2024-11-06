@@ -2,50 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/extension/string_extension.dart';
-import 'package:workinax/model/work_clock.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
+import 'package:workinax/time_entry/domain/time_entry_model.dart';
 import 'package:workinax/widgets/edit_time_dialog.dart';
 import 'package:workinax/widgets/rounded_text.dart';
 
 class HistoryItem extends StatelessWidget {
-  const HistoryItem(this.workClock, {super.key});
+  const HistoryItem(this.timeEntry, {super.key});
 
-  final WorkClock workClock;
+  final TimeEntryModel timeEntry;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => _onTap(context, workClock),
+      onTap: () => _onTap(context, timeEntry),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: Insets.m, vertical: Insets.m),
+        padding: const EdgeInsets.symmetric(
+            horizontal: Insets.m, vertical: Insets.m),
         margin: const EdgeInsets.only(bottom: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RoundedText(
-              workClock.date.formatDayMonth,
+              timeEntry.startTime.formatDayMonth,
               color: AppColor.lightBlue,
             ),
-            const SizedBox(width: Insets.m,),
+            const SizedBox(
+              width: Insets.m,
+            ),
             Expanded(
               child: Wrap(
                 spacing: Insets.m,
                 runSpacing: Insets.m,
                 children: [
                   ClockIn(
-                    label: [workClock.startWorkTime, workClock.endWorkTime].formatRange,
+                    label: [timeEntry.startTime, timeEntry.endTime].formatRange,
                   ),
                   BreakTime(
-                    label: workClock.totalBreakTime.formatDuration,
+                    label: timeEntry.totalBreakHours.formatDuration,
                   ),
                   TotalHours(
-                    label: [workClock.endWorkTime, workClock.startWorkTime].formatHoursDiff,
+                    label: timeEntry.totalHours.formatShortDuration,
                   ),
                 ],
               ),
@@ -56,8 +59,8 @@ class HistoryItem extends StatelessWidget {
     );
   }
 
-  _onTap(BuildContext context, WorkClock workClock) {
-    showEditTimeDialog(context, workClock);
+  _onTap(BuildContext context, TimeEntryModel timeEntry) {
+    showEditTimeDialog(context, timeEntry);
   }
 }
 
@@ -97,6 +100,7 @@ class ClockIn extends StatelessWidget {
   const ClockIn({super.key, this.label});
 
   final String? label;
+
   @override
   Widget build(BuildContext context) {
     return IconRow(

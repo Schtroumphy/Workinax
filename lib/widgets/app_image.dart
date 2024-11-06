@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workinax/model/mode_type.dart';
+import 'package:workinax/time_entry/domain/mode_type.dart';
 import 'package:workinax/widgets/break_timer.dart';
 
 class AppImage extends StatelessWidget {
@@ -18,8 +18,7 @@ class AppImage extends StatelessWidget {
             Image.asset('assets/images/coffee.png'),
           _ => const SizedBox.shrink(),
         },
-        if(mode == ModeType.breakInProgress)
-          const BreakTimer()
+        if (mode == ModeType.breakInProgress) const BreakTimer()
       ],
     );
   }

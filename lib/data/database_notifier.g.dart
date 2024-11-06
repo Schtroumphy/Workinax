@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'timer_notifier.dart';
+part of 'database_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$timerNotifierHash() => r'8334b19c3a659e5639b7fb19c3629f6be9551570';
+String _$databaseNotifierHash() => r'f7928b294b976d3aadfb113286676d07334028cf';
 
-/// See also [TimerNotifier].
-@ProviderFor(TimerNotifier)
-final timerNotifierProvider =
-    AutoDisposeNotifierProvider<TimerNotifier, Duration>.internal(
-  TimerNotifier.new,
-  name: r'timerNotifierProvider',
+/// See also [DatabaseNotifier].
+@ProviderFor(DatabaseNotifier)
+final databaseNotifierProvider =
+    AutoDisposeAsyncNotifierProvider<DatabaseNotifier, Database>.internal(
+  DatabaseNotifier.new,
+  name: r'databaseNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$timerNotifierHash,
+      : _$databaseNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$TimerNotifier = AutoDisposeNotifier<Duration>;
+typedef _$DatabaseNotifier = AutoDisposeAsyncNotifier<Database>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
