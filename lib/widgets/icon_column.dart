@@ -16,7 +16,7 @@ class IconColumn extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SvgPicture.asset(
-          iconPath ?? 'assets/icons/coffee.svg',
+          iconPath ?? 'assets/icons/coffee_break.svg',
           width: 25,
           height: 25,
         ),
