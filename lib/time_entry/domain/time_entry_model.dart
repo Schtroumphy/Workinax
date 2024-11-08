@@ -24,6 +24,18 @@ class TimeEntryModel {
 
   Duration get totalHours => endTime?.difference(startTime) ?? Duration.zero;
 
+  Duration get overtime =>
+      endTime?.difference((endTime ?? DateTime.now()).copyWith(
+        hour: 12,
+        minute: 30,
+        second: 0,
+      )) ??
+      Duration.zero;
+
+  bool get isLate => !startTime
+      .difference(startTime.copyWith(hour: 5, minute: 0, second: 0))
+      .isNegative;
+
   TimeEntryModel copyWith({
     int? id,
     DateTime? startTime,

@@ -5,6 +5,7 @@ import 'package:workinax/extension/string_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';
+import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/edit_time_dialog.dart';
 import 'package:workinax/widgets/rounded_text.dart';
 
@@ -20,38 +21,49 @@ class HistoryItem extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
-          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: timeEntry.isLate ? Colors.red : Colors.grey.withOpacity(0.4),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.symmetric(
             horizontal: Insets.m, vertical: Insets.m),
         margin: const EdgeInsets.only(bottom: 12),
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            RoundedText(
-              timeEntry.startTime.formatDayMonth,
-              color: AppColor.lightBlue,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const SizedBox(width: Insets.l),
+                AppText(
+                  timeEntry.startTime.formatDayNumber,
+                  fontSizeType: FontSizeType.xlarge,
+                ),
+                const SizedBox(width: Insets.xl),
+                RoundedText(
+                  [timeEntry.startTime, timeEntry.endTime].formatRange,
+                ),
+                const SizedBox(width: Insets.m),
+                if (timeEntry.isLate)
+                  const Icon(Icons.warning, color: Colors.red),
+              ],
             ),
-            const SizedBox(
-              width: Insets.m,
-            ),
-            Expanded(
-              child: Wrap(
-                spacing: Insets.m,
-                runSpacing: Insets.m,
-                children: [
-                  ClockIn(
-                    label: [timeEntry.startTime, timeEntry.endTime].formatRange,
-                  ),
-                  BreakTime(
-                    label: timeEntry.totalBreakHours.formatDuration,
-                  ),
-                  TotalHours(
-                    label: timeEntry.totalHours.formatShortDuration,
-                  ),
-                ],
-              ),
+            const SizedBox(height: Insets.m),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                BreakTime(
+                  label: timeEntry.totalBreakHours.formatShortDuration,
+                ),
+                TotalHours(
+                  label: timeEntry.totalHours.formatShortDuration,
+                ),
+                Overtime(
+                  label: timeEntry.overtime.formatDuration,
+                )
+              ],
             ),
           ],
         ),
@@ -83,13 +95,17 @@ class IconRow extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Flexible(child: Icon(icon, size: 24)),
-        const SizedBox(width: 4),
         Flexible(
-            child: RoundedText(
+            child: Icon(
+          icon,
+          size: 24,
+          color: Colors.grey,
+        )),
+        const SizedBox(width: Insets.m),
+        Flexible(
+            child: AppText(
           label.orNA,
-          color: color,
-          outlined: outlined,
+          color: Colors.grey,
         )),
       ],
     );
