@@ -21,12 +21,11 @@ class BreakDialogContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final duration = ref.read(timerNotifierProvider).formatShortDuration;
     return AlertDialog(
       title: Center(
         child: AppText(
           isBreakIn ? "Let's take a break ..." : "Let's go back to work",
-          fontSizeType: FontSizeType.large,
+          fontSizeType: FontSizeType.xlarge,
           color: AppColor.primaryColor,
         ),
       ),

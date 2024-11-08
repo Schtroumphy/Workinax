@@ -16,7 +16,8 @@ class AppText extends StatelessWidget {
           fontSize: switch (fontSizeType) {
             FontSizeType.small => 12,
             FontSizeType.medium => 14,
-            FontSizeType.large => 18,
+            FontSizeType.large => 16,
+            FontSizeType.xlarge => 18,
             null => 14,
           },
           color: color ?? AppColor.black,
@@ -32,4 +33,5 @@ enum FontSizeType {
   small,
   medium,
   large,
+  xlarge,
 }

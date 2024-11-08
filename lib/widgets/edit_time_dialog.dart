@@ -40,7 +40,7 @@ class EditTimeDialog extends ConsumerWidget {
         child: AppText(
           addTimeMode ? 'Ajouter un temps' : 'Modifier mes temps',
           color: AppColor.primaryColor,
-          fontSizeType: FontSizeType.large,
+          fontSizeType: FontSizeType.xlarge,
         ),
       ),
       content: FormBuilder(

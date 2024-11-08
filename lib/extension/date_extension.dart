@@ -20,6 +20,8 @@ extension DateExtension on DateTime {
 
   String get formatDayMonth => AppDateFormat.shortDayMonth.format(this);
 
+  String get formatDayNumber => AppDateFormat.shortDayNumber.format(this);
+
   String get formatHoursMinutes => AppDateFormat.shortHourMinute.format(this);
 
   TimeOfDay get toTimeOfDay => TimeOfDay(hour: hour, minute: minute);

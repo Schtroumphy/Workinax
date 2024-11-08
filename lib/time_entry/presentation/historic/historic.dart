@@ -26,7 +26,7 @@ class Historic extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const AppText('Historique', fontSizeType: FontSizeType.large),
+            const AppText('Historique', fontSizeType: FontSizeType.xlarge),
             AppClickableText(
                 label: '+ Ajouter une saisie',
                 onClick: () => _onAddWorkClockClick(context)),
