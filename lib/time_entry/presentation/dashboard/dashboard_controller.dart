@@ -82,6 +82,7 @@ class DashboardController extends _$DashboardController {
     if (timeEntryModel == null) return;
 
     await service.save(timeEntryModel);
+    ref.invalidate(timeEntryServiceProvider);
 
     updateState(
       modeType: ModeType.workEnd,

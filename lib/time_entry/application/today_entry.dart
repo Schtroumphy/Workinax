@@ -7,5 +7,6 @@ part 'today_entry.g.dart';
 
 @riverpod
 Future<TimeEntryModel?> todayEntry(Ref ref) {
-  return ref.read(timeEntryServiceProvider).todayEntry();
+  final service = ref.watch(timeEntryServiceProvider);
+  return service.todayEntry();
 }

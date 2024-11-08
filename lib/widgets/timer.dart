@@ -16,18 +16,43 @@ class TimerFromStartTime extends StatefulWidget {
 }
 
 class TimerFromStartTimeState extends State<TimerFromStartTime> {
+  late final AppLifecycleListener _listener;
   late Timer _timer;
   Duration _elapsedTime = Duration.zero;
 
   @override
   void initState() {
     super.initState();
+    _listener = AppLifecycleListener(
+      onStateChange: _onStateChanged,
+    );
+    _startTimer();
+  }
+
+  void _onStateChanged(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _resetAndStartTimer();
+    } else if (state == AppLifecycleState.paused) {
+      _timer.cancel();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant TimerFromStartTime oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reset timer when an other instance is built
+    _resetAndStartTimer();
+  }
+
+  void _resetAndStartTimer() {
+    _timer.cancel();
     _startTimer();
   }
 
   @override
   void dispose() {
     _timer.cancel();
+    _listener.dispose();
     super.dispose();
   }
 
@@ -51,6 +76,7 @@ class TimerFromStartTimeState extends State<TimerFromStartTime> {
   @override
   Widget build(BuildContext context) {
     return Center(
+      key: UniqueKey(),
       child: RoundedText(
         _elapsedTime.formatDuration,
         color: AppColor.primaryColor,

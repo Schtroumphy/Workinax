@@ -7,13 +7,14 @@ part 'time_entry_service.g.dart';
 
 @Riverpod(keepAlive: true)
 TimeEntryService timeEntryService(Ref ref) {
-  return TimeEntryService(ref.read(timeEntryRepositoryProvider));
+  return TimeEntryService(ref, ref.read(timeEntryRepositoryProvider));
 }
 
 class TimeEntryService {
   final TimeEntryRepository _repository;
+  final Ref _ref;
 
-  TimeEntryService(this._repository);
+  TimeEntryService(this._ref, this._repository);
 
   Future<TimeEntryModel?> saveAndFetch(TimeEntryModel model) async {
     return _repository.saveAndFetch(model);
@@ -36,7 +37,9 @@ class TimeEntryService {
   }
 
   Future<TimeEntryModel?> endBreak(int entryId) {
-    return _repository.endBreak(entryId);
+    final entry = _repository.endBreak(entryId);
+    _ref.invalidateSelf();
+    return entry;
   }
 
   Future<TimeEntryModel?> todayEntry() {
