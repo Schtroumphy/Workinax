@@ -7,8 +7,9 @@ import 'package:workinax/widgets/rounded_text.dart';
 
 class TimerFromStartTime extends StatefulWidget {
   final DateTime? startTime;
+  final bool outlined;
 
-  const TimerFromStartTime({super.key, this.startTime});
+  const TimerFromStartTime({super.key, this.startTime, this.outlined = false});
 
   @override
   TimerFromStartTimeState createState() => TimerFromStartTimeState();
@@ -53,7 +54,8 @@ class TimerFromStartTimeState extends State<TimerFromStartTime> {
       child: RoundedText(
         _elapsedTime.formatDuration,
         color: AppColor.primaryColor,
-        textColor: Colors.white,
+        textColor: widget.outlined ? AppColor.primaryColor : Colors.white,
+        outlined: widget.outlined,
       ),
     );
   }

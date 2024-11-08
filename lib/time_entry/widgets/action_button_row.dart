@@ -12,7 +12,7 @@ class ActionButtonRow extends StatelessWidget {
     this.secondButtonLabel,
   });
 
-  final String firstButtonLabel;
+  final String? firstButtonLabel;
   final VoidCallback? onBreakClick;
   final String? secondButtonLabel;
   final VoidCallback? onClockOutClick;
@@ -21,11 +21,14 @@ class ActionButtonRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
+        if (firstButtonLabel != null) ...[
+          Expanded(
             child: RoundedButton(
-          label: firstButtonLabel,
-          onClick: onBreakClick,
-        )),
+              label: firstButtonLabel!,
+              onClick: onBreakClick,
+            ),
+          ),
+        ],
         if (secondButtonLabel != null) ...[
           const SizedBox(width: Insets.m),
           Expanded(

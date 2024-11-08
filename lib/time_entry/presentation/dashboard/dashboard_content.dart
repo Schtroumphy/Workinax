@@ -39,11 +39,13 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
               onBreakOutClick: _onBreakOutClick,
             ),
             const SizedBox(height: 16),
+            const SizedBox(height: 16),
             if (state.modeType != ModeType.notStarted) ...const [
               AsyncWorkTimesCard(),
               SizedBox(height: 16),
             ],
             if (!state.modeType.isWorking) const Historic(),
+            const SizedBox(height: 16),
             AppImage(mode: state.modeType),
           ],
         ),

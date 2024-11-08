@@ -8,6 +8,7 @@ class ActionHeader extends ConsumerWidget {
   const ActionHeader({
     super.key,
     required this.mode,
+    this.allowBreak = true,
     required this.onClockInClick,
     required this.onClockOutClick,
     required this.onBreakInClick,
@@ -15,6 +16,7 @@ class ActionHeader extends ConsumerWidget {
   });
 
   final ModeType mode;
+  final bool allowBreak;
   final VoidCallback onClockInClick;
   final VoidCallback onClockOutClick;
   final VoidCallback onBreakInClick;
@@ -25,7 +27,7 @@ class ActionHeader extends ConsumerWidget {
     return switch (mode) {
       ModeType.notStarted => ClockInCard(onClockInClick: onClockInClick),
       ModeType.workInProgress => ActionButtonRow(
-          firstButtonLabel: 'Prendre une pause',
+          firstButtonLabel: allowBreak ? 'Prendre une pause' : null,
           onBreakClick: onBreakInClick,
           secondButtonLabel: 'Débaucher',
           onClockOutClick: onClockOutClick,

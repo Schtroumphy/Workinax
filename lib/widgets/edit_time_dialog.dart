@@ -36,9 +36,12 @@ class EditTimeDialog extends ConsumerWidget {
     final addTimeMode = timeEntry.id == null;
 
     return AlertDialog(
-      title: AppText(
-        addTimeMode ? 'Ajouter un temps' : 'Modifier mes temps',
-        color: AppColor.primaryColor,
+      title: Align(
+        child: AppText(
+          addTimeMode ? 'Ajouter un temps' : 'Modifier mes temps',
+          color: AppColor.primaryColor,
+          fontSizeType: FontSizeType.large,
+        ),
       ),
       content: FormBuilder(
         key: _formKey,

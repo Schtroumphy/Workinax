@@ -38,7 +38,7 @@ class Historic extends ConsumerWidget {
           data: (timeEntries) {
             if (timeEntries.isEmpty) {
               return const AppText(
-                'No data yet',
+                'Pas encore de données ...',
                 color: Colors.grey,
               );
             }

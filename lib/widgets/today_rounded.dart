@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/theme/colors.dart';
+import 'package:workinax/theme/insets.dart';
 
 class TodayRounded extends StatelessWidget {
   const TodayRounded({super.key});
@@ -8,21 +9,23 @@ class TodayRounded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding:
+          const EdgeInsets.symmetric(horizontal: Insets.m, vertical: Insets.xs),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: AppColor.primaryColor,
-      ),
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          border: Border.all(color: AppColor.primaryColor)),
       child: Row(
         children: [
           const Icon(
             Icons.date_range,
-            color: Colors.white,
+            color: AppColor.primaryColor,
+            size: Insets.l,
           ),
           const SizedBox(width: 4),
           Text(
             DateTime.now().formatShortDate,
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: AppColor.primaryColor),
           ),
         ],
       ),

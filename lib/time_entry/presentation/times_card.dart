@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/time_entry/application/today_entry.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';
-import 'package:workinax/widgets/app_outlined_button.dart';
-import 'package:workinax/widgets/app_text.dart';
 import 'package:workinax/widgets/async_value_widget.dart';
 import 'package:workinax/widgets/edit_time_dialog.dart';
 import 'package:workinax/widgets/icon_column.dart';
-import 'package:workinax/widgets/timer.dart';
 
 class AsyncWorkTimesCard extends ConsumerWidget {
   const AsyncWorkTimesCard({super.key});
@@ -34,65 +32,45 @@ class WorkTimesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shadowColor: Colors.transparent,
-      color: AppColor.lightBlue,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColor.lightBlue,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(Insets.l),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppText(
-                  timeEntry.endTime != null
-                      ? 'Temps de travail du jour'
-                      : 'Travail en cours ...',
-                  fontSizeType: FontSizeType.medium,
-                ),
-                timeEntry.endTime != null
-                    ? AppOutlinedButton(
-                        label: 'Modifier',
-                        onClick: () => _onEditClick(context),
-                      )
-                    : TimerFromStartTime(startTime: timeEntry.startTime),
-              ],
-            ),
             const SizedBox(height: Insets.m),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Flexible(
                   child: IconColumn(
-                      icon: Icons.share_arrival_time_outlined,
+                      iconPath: 'assets/icons/clock_in.svg',
                       label: timeEntry.startTime.formatHoursMinutes,
                       subtitle: 'Embauché'),
                 ),
-                // Flexible(
-                //   child: IconColumn(
-                //     icon: Icons.coffee,
-                //     label: timeEntry.breaks.first.duration.formatShortDuration,
-                //     subtitle: 'Pause',
-                //   ),
-                // ),
-                // Flexible(
-                //   child: IconColumn(
-                //     icon: Icons.coffee,
-                //     label: timeEntry.breaks.first.duration.formatShortDuration,
-                //     subtitle: 'Pause',
-                //   ),
-                // ),
+                for (var b in timeEntry.breaks)
+                  Flexible(
+                    child: IconColumn(
+                      iconPath: 'assets/icons/coffee.svg',
+                      label: b.duration.formatShortDuration,
+                      subtitle: 'Pause',
+                    ),
+                  ),
                 Flexible(
                   child: IconColumn(
-                    icon: Icons.exit_to_app,
+                    iconPath: 'assets/icons/out.svg',
                     label: timeEntry.endTime?.formatHoursMinutes ?? 'N/A',
                     subtitle: 'Débauché',
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
