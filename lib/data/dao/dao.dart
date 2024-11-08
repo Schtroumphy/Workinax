@@ -24,6 +24,8 @@ abstract class DAO<T extends AppEntity> {
     final rows = await withDatabase(
       (db) => db.query(
         tableName,
+        where: where,
+        whereArgs: whereArgs,
         limit: 1,
       ),
     );
