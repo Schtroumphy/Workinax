@@ -2,6 +2,10 @@
 
 A work clock in & out project
 
+## Modèle de données
+
+![img.png](documentation/img.png)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
