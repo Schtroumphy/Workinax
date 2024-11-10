@@ -32,6 +32,10 @@ class DatabaseNotifier extends _$DatabaseNotifier {
       version: 1,
       onCreate: (Database db, int version) async {
         await db.execute('''
+          DROP TABLE IF EXISTS time_entry 
+        ''');
+
+        await db.execute('''
         CREATE TABLE time_entry
         (
           id                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -42,6 +46,10 @@ class DatabaseNotifier extends _$DatabaseNotifier {
         ''');
 
         await db.execute('''
+          DROP TABLE IF EXISTS work_break
+        ''');
+
+        await db.execute('''
         CREATE TABLE work_break
         (
           id                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -49,7 +57,7 @@ class DatabaseNotifier extends _$DatabaseNotifier {
           endTime                  TEXT DEFAULT NULL,
           timeEntryId              INT
         )  
-      ''');
+        ''');
       },
     );
   }
