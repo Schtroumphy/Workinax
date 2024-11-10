@@ -57,7 +57,7 @@ class WorkTimesCard extends StatelessWidget {
                 for (var b in timeEntry.breaks)
                   Flexible(
                     child: IconColumn(
-                      iconPath: 'assets/icons/coffee.svg',
+                      iconPath: 'assets/icons/coffee_break.svg',
                       label: b.duration.formatShortDuration,
                       subtitle: 'Pause',
                     ),

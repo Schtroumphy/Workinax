@@ -2,38 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extension/duration_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';
+import 'package:workinax/time_entry/presentation/historic/historic.dart';
 import 'package:workinax/widgets/app_divider.dart';
 import 'package:workinax/widgets/app_outlined_button.dart';
 import 'package:workinax/widgets/app_text.dart';
+import 'package:workinax/widgets/edit_duration_field.dart';
+import 'package:workinax/widgets/edit_time_controller.dart';
 import 'package:workinax/widgets/edit_time_field.dart';
 import 'package:workinax/widgets/rounded_button.dart';
 
 const dateField = 'date_field';
 const clockInField = 'clock_in';
 const clockOutField = 'clock_out';
-const break1Field = 'break_1';
-const break2Field = 'break_2';
+const int maxBreakNumber = 2;
 
-void showEditTimeDialog(BuildContext context, TimeEntryModel timeEntry) {
+void showEditTimeDialog(BuildContext context, TimeEntryModel model) {
   showDialog(
     context: context,
-    builder: (_) => EditTimeDialog(timeEntry: timeEntry),
+    builder: (_) => EditTimeDialog(model: model),
   );
 }
 
-class EditTimeDialog extends ConsumerWidget {
+class EditTimeDialog extends ConsumerStatefulWidget {
   static final _formKey = GlobalKey<FormBuilderState>();
 
-  const EditTimeDialog({super.key, required this.timeEntry});
+  const EditTimeDialog({super.key, required this.model});
 
-  final TimeEntryModel timeEntry;
+  final TimeEntryModel model;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final addTimeMode = timeEntry.id == null;
+  ConsumerState<EditTimeDialog> createState() => _EditTimeDialogState();
+}
+
+class _EditTimeDialogState extends ConsumerState<EditTimeDialog> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final addTimeMode = widget.model.id == null;
+    final state = ref.watch(editTimeControllerProvider(widget.model));
 
     return AlertDialog(
       title: Align(
@@ -43,51 +57,72 @@ class EditTimeDialog extends ConsumerWidget {
           fontSizeType: FontSizeType.xlarge,
         ),
       ),
-      content: FormBuilder(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            addTimeMode
-                ? const EditTimeField(
-                    name: dateField,
-                    title: "Date de saisie",
-                    initialValue: null,
-                    isTimeOnly: false,
-                  )
-                : AppText(timeEntry.startTime.formatShortDate),
-            const SizedBox(
-              height: 8,
-            ),
-            const AppDivider(),
-            EditTimeField(
-              name: clockInField,
-              title: "J'ai embauché à",
-              initialValue: addTimeMode ? null : timeEntry.startTime,
-            ),
-            const SizedBox(height: Insets.l),
-            EditTimeField(
-              name: clockOutField,
-              title: "J'ai débauché à",
-              initialValue: addTimeMode ? null : timeEntry.endTime,
-            ),
-            const SizedBox(height: Insets.l),
-            // EditDurationField(
-            //   name: break1Field,
-            //   title: "Pause 1",
-            //   initialValue: addTimeMode
-            //       ? Duration.zero
-            //       : timeEntry.firstBreakDuration.orZero,
-            // ),
-            // const SizedBox(height: Insets.l),
-            // EditDurationField(
-            //   name: break2Field,
-            //   title: "Pause 2",
-            //   initialValue: addTimeMode
-            //       ? Duration.zero
-            //       : timeEntry.secondBreakDuration.orZero,
-            // ),
-          ],
+      content: SingleChildScrollView(
+        child: FormBuilder(
+          key: EditTimeDialog._formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              addTimeMode
+                  ? const EditTimeField(
+                      name: dateField,
+                      title: "Date de saisie",
+                      initialValue: null,
+                      isTimeOnly: false,
+                    )
+                  : AppText(widget.model.startTime.formatShortDate),
+              const SizedBox(height: 8),
+              const AppDivider(),
+              EditTimeField(
+                name: clockInField,
+                title: "J'ai embauché à",
+                initialValue: addTimeMode ? null : widget.model.startTime,
+              ),
+              const SizedBox(height: Insets.l),
+              EditTimeField(
+                name: clockOutField,
+                title: "J'ai débauché à",
+                initialValue: addTimeMode ? null : widget.model.endTime,
+              ),
+              const SizedBox(height: Insets.l),
+              for (var i = 0; i < state.breaks.length; i++) ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          EditTimeField(
+                            name: 'break_start_$i',
+                            title: "Début pause $i",
+                            initialValue: state.breaks[i].startTime,
+                            required: true,
+                          ),
+                          const SizedBox(height: Insets.m),
+                          EditDurationField(
+                            name: 'break_duration_$i',
+                            title: "Durée pause $i",
+                            initialValue: state.breaks[i].duration.orZero,
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () => _onDeleteBreak(i),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Insets.l),
+              ],
+              if (state.breaks.length < maxBreakNumber) ...[
+                const SizedBox(height: Insets.l),
+                AppClickableText(
+                  label: '+ Ajouter une pause',
+                  onClick: _onAddBreakClick,
+                ),
+              ]
+            ],
+          ),
         ),
       ),
       actions: [
@@ -103,26 +138,29 @@ class EditTimeDialog extends ConsumerWidget {
     );
   }
 
+  void _onAddBreakClick() {
+    ref.read(editTimeControllerProvider(widget.model).notifier).addBreak();
+  }
+
+  void _onDeleteBreak(int index) {
+    ref
+        .read(editTimeControllerProvider(widget.model).notifier)
+        .deleteBreak(index);
+  }
+
   _onCancel(BuildContext context) {
     Navigator.pop(context);
   }
 
   _onConfirm(BuildContext context, WidgetRef ref) {
-    final state = _formKey.currentState;
+    final state = EditTimeDialog._formKey.currentState;
 
     if (state == null || state.isValid == false) return;
 
-    // final newWC = timeEntry.copyWith(
-    //   date: (state.fields[dateField]?.value as DateTime?),
-    //   startTime:
-    //       (state.fields[clockInField]?.value as DateTime?)?.toTimeOfDay,
-    //   endTime:
-    //       (state.fields[clockOutField]?.value as DateTime?)?.toTimeOfDay,
-    //   firstBreakDuration: state.fields[break1Field]?.value as Duration?,
-    //   secondBreakDuration: state.fields[break2Field]?.value as Duration?,
-    // );
-    //
-    // ref.read(workClockServiceProvider).save(newWC);
+    state.save();
+    final values = state.value;
+
+    ref.read(editTimeControllerProvider(widget.model).notifier).save(values);
 
     Navigator.pop(context);
   }

@@ -71,8 +71,8 @@ class HistoryItem extends StatelessWidget {
     );
   }
 
-  _onTap(BuildContext context, TimeEntryModel timeEntry) {
-    showEditTimeDialog(context, timeEntry);
+  _onTap(BuildContext context, TimeEntryModel model) {
+    showEditTimeDialog(context, model);
   }
 }
 

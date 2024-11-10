@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:workinax/core/constants/app_date_format.dart';
 import 'package:workinax/widgets/app_text.dart';
 
 class EditTimeField extends StatefulWidget {
-  const EditTimeField(
-      {super.key,
-      required this.title,
-      this.initialValue,
-      required this.name,
-      this.isTimeOnly = true});
+  const EditTimeField({
+    super.key,
+    required this.title,
+    this.initialValue,
+    required this.name,
+    this.isTimeOnly = true,
+    this.required = false,
+  });
 
   final String name;
   final String title;
   final DateTime? initialValue;
   final bool isTimeOnly;
+  final bool required;
 
   @override
   State<EditTimeField> createState() => _EditTimeFieldState();
@@ -45,6 +49,11 @@ class _EditTimeFieldState extends State<EditTimeField> {
                 : Icons.calendar_today_rounded),
           ),
           keyboardType: TextInputType.datetime,
+          validator: FormBuilderValidators.compose([
+            if (widget.required)
+              FormBuilderValidators.required(
+                  errorText: 'Le champs est obligatoire')
+          ]),
         )
       ],
     );
