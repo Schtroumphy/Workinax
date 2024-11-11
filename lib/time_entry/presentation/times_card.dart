@@ -37,47 +37,51 @@ class WorkTimesCard extends StatelessWidget {
         color: AppColor.lightBlue,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(Insets.l),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const SizedBox(height: Insets.m),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: IconColumn(
-                      iconPath: 'assets/icons/clock_in.svg',
-                      label: timeEntry.startTime.formatHoursMinutes,
-                      subtitle: 'Embauché'),
-                ),
-                for (var b in timeEntry.breaks)
+      child: InkWell(
+        onTap: () => _onEditClick(context),
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.all(Insets.l),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const SizedBox(height: Insets.m),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
                   Flexible(
                     child: IconColumn(
-                      iconPath: 'assets/icons/coffee_break.svg',
-                      label: b.duration.formatShortDuration,
-                      subtitle: 'Pause',
+                        iconPath: 'assets/icons/clock_in.svg',
+                        label: timeEntry.startTime.formatHoursMinutes,
+                        subtitle: 'Embauché'),
+                  ),
+                  for (var b in timeEntry.breaks)
+                    Flexible(
+                      child: IconColumn(
+                        iconPath: 'assets/icons/coffee_break.svg',
+                        label: b.duration.formatDuration,
+                        subtitle: 'Pause',
+                      ),
+                    ),
+                  Flexible(
+                    child: IconColumn(
+                      iconPath: 'assets/icons/out.svg',
+                      label: timeEntry.endTime?.formatHoursMinutes ?? 'N/A',
+                      subtitle: 'Débauché',
                     ),
                   ),
-                Flexible(
-                  child: IconColumn(
-                    iconPath: 'assets/icons/out.svg',
-                    label: timeEntry.endTime?.formatHoursMinutes ?? 'N/A',
-                    subtitle: 'Débauché',
-                  ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   _onEditClick(BuildContext context) {
-    showEditTimeDialog(context, timeEntry);
+    if (timeEntry.endTime != null) showEditTimeDialog(context, timeEntry);
   }
 }
