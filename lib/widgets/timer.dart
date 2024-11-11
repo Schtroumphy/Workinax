@@ -78,7 +78,7 @@ class TimerFromStartTimeState extends State<TimerFromStartTime> {
     return Center(
       key: UniqueKey(),
       child: RoundedText(
-        _elapsedTime.formatDuration,
+        _elapsedTime.formatClockDuration,
         color: AppColor.primaryColor,
         textColor: widget.outlined ? AppColor.primaryColor : Colors.white,
         outlined: widget.outlined,

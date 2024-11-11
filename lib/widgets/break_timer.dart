@@ -12,7 +12,7 @@ class BreakTimer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final breakDuration =
-        ref.watch(timerNotifierProvider(DateTime.now())).formatShortDuration;
+        ref.watch(timerNotifierProvider(DateTime.now())).formatClockDuration;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

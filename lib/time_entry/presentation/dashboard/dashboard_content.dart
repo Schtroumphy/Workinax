@@ -58,7 +58,7 @@ class _DashboardContentState extends ConsumerState<DashboardContent> {
               )
             ],
             if (!state.modeType.isWorking) const Historic(),
-            const SizedBox(height: 16),
+            const SizedBox(height: Insets.xxl),
             AppImage(mode: state.modeType),
           ],
         ),

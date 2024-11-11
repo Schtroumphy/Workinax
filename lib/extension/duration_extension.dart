@@ -18,13 +18,14 @@ extension DurationExtension on Duration? {
     return buffer.isEmpty ? 'Ø' : buffer.toString().trim();
   }
 
-  String get formatShortDuration {
+  String get formatClockDuration {
     final duration = this;
-    if (duration == null) return '00:00';
+    if (duration == null) return '00:00:00';
 
+    final hours = duration.inHours.toString().padLeft(2, '0');
     final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
     final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
-    return '$minutes:$seconds';
+    return '$hours:$minutes:$seconds';
   }
 
   Duration get orZero => this ?? Duration.zero;
