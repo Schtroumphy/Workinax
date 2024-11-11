@@ -92,11 +92,27 @@ class EditTimeController extends _$EditTimeController {
       final currentEntry = state.timeEntry;
       if (currentEntry == null) return;
 
+      final baseDate =
+          formValues[dateField] as DateTime?; // When creating new entry
+
+      DateTime? adjustDate(DateTime? dateTime) {
+        if (dateTime == null || baseDate == null) return dateTime;
+        return DateTime(
+          baseDate.year,
+          baseDate.month,
+          baseDate.day,
+          dateTime.hour,
+          dateTime.minute,
+          dateTime.second,
+        );
+      }
+
       final updatedBreaks = state.breaks.asMap().entries.map((entry) {
         final index = entry.key;
         final breakItem = entry.value;
 
-        final startTime = formValues['break_start_$index'] as DateTime?;
+        final startTime =
+            adjustDate(formValues['break_start_$index'] as DateTime?);
         final duration = formValues['break_duration_$index'] as Duration?;
         final endTime = startTime?.add(duration ?? Duration.zero);
 
@@ -110,8 +126,9 @@ class EditTimeController extends _$EditTimeController {
 
       final updatedModel = TimeEntryModel(
         id: currentEntry.id,
-        startTime: formValues[clockInField] ?? currentEntry.startTime,
-        endTime: formValues[clockOutField],
+        startTime:
+            adjustDate(formValues[clockInField]) ?? currentEntry.startTime,
+        endTime: adjustDate(formValues[clockOutField]),
         breaks: updatedBreaks,
       );
 
