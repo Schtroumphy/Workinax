@@ -10,6 +10,10 @@ class TimeEntry extends AppEntity {
 
   final int? id;
 
+  @JsonKey(includeToJson: true)
+  @SimpleDateTimeConverter()
+  final DateTime date;
+
   @DateTimeConverter()
   final DateTime startTime;
 
@@ -20,14 +24,30 @@ class TimeEntry extends AppEntity {
     this.id,
     required this.startTime,
     this.endTime,
-  });
+  }) : date = DateTime(startTime.year, startTime.month, startTime.day);
 
   int get totalHours => (endTime?.hour ?? 0) - (startTime.hour);
 
-  factory TimeEntry.fromJson(Map<String, dynamic> json) =>
-      _$TimeEntryFromJson(json);
+  factory TimeEntry.fromJson(Map<String, dynamic> json) {
+    return TimeEntry(
+      id: json['id'] as int?,
+      startTime:
+          const DateTimeConverter().fromJson(json['startTime'] as String),
+      endTime: json['endTime'] != null
+          ? const DateTimeConverter().fromJson(json['endTime'] as String)
+          : null,
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$TimeEntryToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'date': const SimpleDateTimeConverter().toJson(date),
+      'startTime': const DateTimeConverter().toJson(startTime),
+      'endTime':
+          endTime != null ? const DateTimeConverter().toJson(endTime!) : null,
+    };
+  }
 
   TimeEntry copyWith({
     int? id,

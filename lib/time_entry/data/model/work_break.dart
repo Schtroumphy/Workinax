@@ -41,12 +41,13 @@ class WorkBreak extends AppEntity {
     int? id,
     DateTime? startTime,
     DateTime? endTime,
+    int? timeEntryId,
   }) {
     return WorkBreak(
       id: id ?? this.id,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
-      timeEntryId: timeEntryId,
+      timeEntryId: timeEntryId ?? this.timeEntryId,
     );
   }
 }

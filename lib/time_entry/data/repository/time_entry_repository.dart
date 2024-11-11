@@ -36,8 +36,12 @@ class TimeEntryRepository {
   }
 
   Future<int> save(TimeEntryModel model) async {
-    model.breaks.forEach(_workBreakDao.save);
-    return _timeEntryDao.save(model.toTimeEntry());
+    final id = await _timeEntryDao.save(model.toTimeEntry());
+    final breaks = model.breaks.map((b) => b.copyWith(
+          timeEntryId: id,
+        ));
+    breaks.forEach(_workBreakDao.save);
+    return id;
   }
 
   Future<TimeEntryModel?> getById(int id) async {
