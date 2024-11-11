@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workinax/extension/date_extension.dart';
 import 'package:workinax/extension/duration_extension.dart';
+import 'package:workinax/extension/time_of_day_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';
@@ -77,12 +78,17 @@ class _EditTimeDialogState extends ConsumerState<EditTimeDialog> {
                 name: clockInField,
                 title: "J'ai embauché à",
                 initialValue: addTimeMode ? null : widget.model.startTime,
+                onChanged: (date) => ref
+                    .read(editTimeControllerProvider(widget.model).notifier)
+                    .onStartTimeChange(date),
               ),
               const SizedBox(height: Insets.l),
               EditTimeField(
                 name: clockOutField,
                 title: "J'ai débauché à",
                 initialValue: addTimeMode ? null : widget.model.endTime,
+                condition: (date) =>
+                    isEndDateIsAfterStart(date, state.timeEntry?.startTime),
               ),
               const SizedBox(height: Insets.l),
               for (var i = 0; i < state.breaks.length; i++) ...[
@@ -138,6 +144,14 @@ class _EditTimeDialogState extends ConsumerState<EditTimeDialog> {
     );
   }
 
+  bool isEndDateIsAfterStart(DateTime? endDate, DateTime? startDate) {
+    final applyValidator = startDate != null &&
+        endDate != null &&
+        !TimeOfDay(hour: endDate.hour, minute: endDate.minute)
+            .isAfter(TimeOfDay(hour: startDate.hour, minute: startDate.minute));
+    return applyValidator;
+  }
+
   void _onAddBreakClick() {
     ref.read(editTimeControllerProvider(widget.model).notifier).addBreak();
   }
@@ -154,9 +168,13 @@ class _EditTimeDialogState extends ConsumerState<EditTimeDialog> {
 
   _onConfirm(BuildContext context, WidgetRef ref) {
     final state = EditTimeDialog._formKey.currentState;
+    if (state == null) return;
 
-    if (state == null || state.isValid == false) return;
+    state.validate();
 
+    if (!state.isValid) return;
+
+    // Save fields if valid
     state.save();
     final values = state.value;
 

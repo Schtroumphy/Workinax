@@ -4,14 +4,17 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:workinax/core/constants/app_date_format.dart';
 import 'package:workinax/widgets/app_text.dart';
 
-class EditTimeField extends StatefulWidget {
+class EditTimeField extends StatelessWidget {
   const EditTimeField({
     super.key,
     required this.title,
     this.initialValue,
     required this.name,
     this.isTimeOnly = true,
-    this.required = false,
+    this.required = true,
+    this.condition,
+    this.validator,
+    this.onChanged,
   });
 
   final String name;
@@ -19,41 +22,46 @@ class EditTimeField extends StatefulWidget {
   final DateTime? initialValue;
   final bool isTimeOnly;
   final bool required;
+  final bool Function(DateTime?)? condition;
+  final String? Function(DateTime?)? validator;
+  final Function(DateTime?)? onChanged;
 
-  @override
-  State<EditTimeField> createState() => _EditTimeFieldState();
-}
-
-class _EditTimeFieldState extends State<EditTimeField> {
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(widget.title),
+        AppText(title),
         FormBuilderDateTimePicker(
-          name: widget.name,
-          initialValue: widget.initialValue,
+          name: name,
+          initialValue: initialValue,
           initialDatePickerMode: DatePickerMode.day,
           initialTime: TimeOfDay.now(),
           timePickerInitialEntryMode: TimePickerEntryMode.input,
-          format: widget.isTimeOnly
+          onChanged: onChanged,
+          format: isTimeOnly
               ? AppDateFormat.shortHourMinute
               : AppDateFormat.mediumDateFormat,
-          inputType: widget.isTimeOnly ? InputType.time : InputType.date,
+          inputType: isTimeOnly ? InputType.time : InputType.date,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            prefixIcon: Icon(widget.isTimeOnly
-                ? Icons.access_time
-                : Icons.calendar_today_rounded),
+            prefixIcon: Icon(
+                isTimeOnly ? Icons.access_time : Icons.calendar_today_rounded),
           ),
           keyboardType: TextInputType.datetime,
           validator: FormBuilderValidators.compose([
-            if (widget.required)
+            if (required)
               FormBuilderValidators.required(
-                  errorText: 'Le champs est obligatoire')
+                  errorText: 'Le champs est obligatoire'),
+            if (condition != null)
+              FormBuilderValidators.conditional(
+                condition!,
+                validator ?? (_) => 'La date saisie est invalide',
+              )
           ]),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autofocus: false,
         )
       ],
     );

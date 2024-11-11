@@ -45,6 +45,14 @@ class EditTimeController extends _$EditTimeController {
     );
   }
 
+  void onStartTimeChange(DateTime? date) {
+    if (date == null) return;
+
+    state = state.copyWith(
+      timeEntry: state.timeEntry?.copyWith(startTime: date),
+    );
+  }
+
   void addBreak() {
     final newBreak = WorkBreak(
       startTime: DateTime.now(),
