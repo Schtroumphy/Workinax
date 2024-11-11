@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workinax/time_entry/presentation/dashboard/dashboard_content.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const ProviderScope(
-    child: MaterialApp(
-      home: WorkinaxApp(),
+  runApp(
+    const ProviderScope(
+      child: MaterialApp(
+        locale: Locale('fr', 'FR'),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: WorkinaxApp(),
+      ),
     ),
-  ));
+  );
 }
 
 class WorkinaxApp extends StatefulWidget {
