@@ -33,10 +33,4 @@ extension DateListExtension on List<DateTime?> {
 
     return '${this[0]!.formatHoursMinutes} - ${this[1]?.formatHoursMinutes.orNA}';
   }
-
-// String get formatHoursDiff {
-//   if (length != 2 || any((e) => e == null)) return 'N/A';
-//
-//   return timeDifference(this[0]!, this[1]!);
-// }
 }

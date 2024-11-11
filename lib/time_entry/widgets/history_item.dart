@@ -55,10 +55,10 @@ class HistoryItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 BreakTime(
-                  label: timeEntry.totalBreakHours.formatShortDuration,
+                  label: timeEntry.totalBreakHours.formatDuration,
                 ),
                 TotalHours(
-                  label: timeEntry.totalHours.formatShortDuration,
+                  label: timeEntry.totalHours.formatDuration,
                 ),
                 Overtime(
                   label: timeEntry.overtime.formatDuration,
