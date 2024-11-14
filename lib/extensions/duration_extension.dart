@@ -1,7 +1,7 @@
 extension DurationExtension on Duration? {
   String get formatDuration {
     final duration = this;
-    if (duration == null) return '';
+    if (duration == null) return 'Ø';
 
     final buffer = StringBuffer();
 
@@ -20,7 +20,7 @@ extension DurationExtension on Duration? {
 
   String get formatClockDuration {
     final duration = this;
-    if (duration == null) return '00:00:00';
+    if (duration == null || duration == Duration.zero) return 'N/A';
 
     final hours = duration.inHours.toString().padLeft(2, '0');
     final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
