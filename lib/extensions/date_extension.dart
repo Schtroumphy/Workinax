@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:workinax/core/constants/app_date_format.dart';
 import 'package:workinax/extensions/string_extension.dart';
@@ -18,6 +19,8 @@ extension DateExtension on DateTime {
   String get formatDayNumber => AppDateFormat.shortDayNumber.format(this);
 
   String get formatHoursMinutes => AppDateFormat.shortHourMinute.format(this);
+
+  TimeOfDay get toTimeOfDay => TimeOfDay(hour: hour, minute: minute);
 }
 
 extension DateListExtension on List<DateTime?> {

@@ -1,32 +1,39 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:workinax/extensions/date_extension.dart';
 
 main() {
-  group('Format date', () {
+  group('', () {
     // given
     final date = DateTime(2024, 11, 14, 08, 20);
 
-    test('formatDbShortDate should format date like yyyy-MM-dd', () {
-      final result = date.formatDbShortDate;
-      expect(result, '2024-11-14');
+    group('Format date', () {
+      test('formatDbShortDate should format date like yyyy-MM-dd', () {
+        final result = date.formatDbShortDate;
+        expect(result, '2024-11-14');
+      });
+
+      test('formatDayNumber should format date like EE d', () {
+        final result = date.formatDayNumber;
+        expect(result, 'Thu 14');
+      });
+
+      test('formatHoursMinutes should format date like HH:mm', () {
+        final result = date.formatHoursMinutes;
+        expect(result, '08:20');
+      });
+
+      test('formatShortDate should format date like EE d MMM, y in French', () {
+        final result = date.formatFrShortDate;
+        expect(result, 'Jeu 14 Nov, 2024');
+      });
     });
 
-    test('formatDayNumber should format date like EE d', () {
-      final result = date.formatDayNumber;
-      expect(result, 'Thu 14');
-    });
-
-    test('formatHoursMinutes should format date like HH:mm', () {
-      final result = date.formatHoursMinutes;
-      expect(result, '08:20');
-    });
-
-    test('formatShortDate should format date like EE d MMM, y in French', () {
-      final result = date.formatFrShortDate;
-      expect(result, 'Jeu 14 Nov, 2024');
+    test('toTimeOfDay', () {
+      final result = date.toTimeOfDay;
+      expect(result, const TimeOfDay(hour: 08, minute: 20));
     });
   });
-
   group('DateListExtension', () {
     group('formatRange', () {
       test(

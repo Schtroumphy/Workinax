@@ -147,8 +147,7 @@ class _EditTimeDialogState extends ConsumerState<EditTimeDialog> {
   bool isEndDateIsAfterStart(DateTime? endDate, DateTime? startDate) {
     final applyValidator = startDate != null &&
         endDate != null &&
-        !TimeOfDay(hour: endDate.hour, minute: endDate.minute)
-            .isAfter(TimeOfDay(hour: startDate.hour, minute: startDate.minute));
+        !endDate.toTimeOfDay.isAfter(startDate.toTimeOfDay);
     return applyValidator;
   }
 
