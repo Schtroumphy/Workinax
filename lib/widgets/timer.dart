@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:workinax/extension/duration_extension.dart';
+import 'package:workinax/extensions/duration_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/widgets/rounded_text.dart';
 

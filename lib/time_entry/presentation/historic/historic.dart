@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extensions/date_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';
@@ -68,8 +68,8 @@ class Historic extends ConsumerWidget {
                     ),
                     confirmDismiss: (_) async {
                       final current = timeEntries[index];
-                      if (current.startTime.formatShortDate ==
-                          DateTime.now().formatShortDate) {
+                      if (current.startTime.formatFrShortDate ==
+                          DateTime.now().formatFrShortDate) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           backgroundColor: AppColor.primaryColor,

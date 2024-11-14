@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/extension/date_extension.dart';
-import 'package:workinax/extension/duration_extension.dart';
-import 'package:workinax/extension/time_of_day_extension.dart';
+import 'package:workinax/extensions/date_extension.dart';
+import 'package:workinax/extensions/duration_extension.dart';
+import 'package:workinax/extensions/time_of_day_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';
@@ -71,7 +71,7 @@ class _EditTimeDialogState extends ConsumerState<EditTimeDialog> {
                       initialValue: null,
                       isTimeOnly: false,
                     )
-                  : AppText(widget.model.startTime.formatShortDate),
+                  : AppText(widget.model.startTime.formatFrShortDate),
               const SizedBox(height: 8),
               const AppDivider(),
               EditTimeField(

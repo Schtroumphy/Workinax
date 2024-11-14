@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:workinax/data/dao/time_entry_dao.dart';
 import 'package:workinax/data/dao/work_break_dao.dart';
-import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extensions/date_extension.dart';
 import 'package:workinax/time_entry/data/model/time_entry.dart';
 import 'package:workinax/time_entry/data/model/work_break.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';

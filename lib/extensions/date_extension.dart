@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:workinax/core/constants/app_date_format.dart';
-import 'package:workinax/extension/string_extension.dart';
+import 'package:workinax/extensions/string_extension.dart';
 
 extension DateExtension on DateTime {
   String get formatDbDate => AppDateFormat.dbDateFormat.format(this);

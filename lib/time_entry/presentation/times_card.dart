@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:workinax/extension/date_extension.dart';
-import 'package:workinax/extension/duration_extension.dart';
+import 'package:workinax/extensions/date_extension.dart';
+import 'package:workinax/extensions/duration_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/time_entry/application/today_entry.dart';

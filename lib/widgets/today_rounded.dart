@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workinax/extension/date_extension.dart';
+import 'package:workinax/extensions/date_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 
@@ -24,7 +24,7 @@ class TodayRounded extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Text(
-            DateTime.now().formatShortDate,
+            DateTime.now().formatFrShortDate,
             style: const TextStyle(color: AppColor.primaryColor),
           ),
         ],

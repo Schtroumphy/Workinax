@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:workinax/extension/date_extension.dart';
-import 'package:workinax/extension/duration_extension.dart';
-import 'package:workinax/extension/string_extension.dart';
+import 'package:workinax/extensions/date_extension.dart';
+import 'package:workinax/extensions/duration_extension.dart';
+import 'package:workinax/extensions/string_extension.dart';
 import 'package:workinax/theme/colors.dart';
 import 'package:workinax/theme/insets.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';

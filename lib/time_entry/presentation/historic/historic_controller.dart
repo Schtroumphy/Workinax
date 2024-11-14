@@ -1,6 +1,6 @@
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:workinax/extension/duration_extension.dart';
+import 'package:workinax/extensions/duration_extension.dart';
 import 'package:workinax/time_entry/application/time_entry_service.dart';
 import 'package:workinax/time_entry/data/model/work_break.dart';
 import 'package:workinax/time_entry/domain/time_entry_model.dart';
