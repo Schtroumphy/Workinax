@@ -18,8 +18,7 @@ class DashboardState {
       : modeType = ModeType.notStarted,
         timeEntryModel = null;
 
-  DashboardState copyWith(
-      {ModeType? modeType, TimeEntryModel? timeEntryModel}) {
+  DashboardState copyWith({ModeType? modeType, TimeEntryModel? timeEntryModel}) {
     return DashboardState(
       modeType: modeType ?? this.modeType,
       timeEntryModel: timeEntryModel ?? this.timeEntryModel,
@@ -35,27 +34,28 @@ class DashboardController extends _$DashboardController {
 
   @override
   Future<DashboardState> build() async {
-    // TODO Get time entry of the day
+    return await initTodayEntry();
+  }
+
+  Future<DashboardState> initTodayEntry() async {
     final todayEntry = await service.todayEntry();
-    return todayEntry == null
-        ? DashboardState.init()
-        : DashboardState(
-            modeType: todayEntry.endTime == null
-                ? ModeType.workInProgress
-                : ModeType.workEnd,
-            timeEntryModel: todayEntry);
+
+    if (todayEntry == null) return DashboardState.init();
+
+    return DashboardState(
+      modeType: todayEntry.endTime != null ? ModeType.workInProgress : ModeType.workEnd,
+      timeEntryModel: todayEntry,
+    );
   }
 
   Future<void> updateState({
     ModeType? modeType,
     TimeEntryModel? model,
   }) async {
-    // I do not like this null check.
     final previousState = state.asData?.valueOrNull;
 
     if (previousState == null) {
-      state = AsyncValue.error(
-          Exception('Previous state is null'), StackTrace.empty);
+      state = AsyncValue.error(Exception('Previous state is null'), StackTrace.empty);
       return;
     }
     final newState = previousState.copyWith(
@@ -70,10 +70,7 @@ class DashboardController extends _$DashboardController {
 
   onClockIn() async {
     final timeEntryModel = await service.saveAndFetch(TimeEntryModel.init());
-    state = AsyncValue.data(state.asData?.value.copyWith(
-            modeType: ModeType.workInProgress,
-            timeEntryModel: timeEntryModel) ??
-        DashboardState.init());
+    state = AsyncValue.data(state.asData?.value.copyWith(modeType: ModeType.workInProgress, timeEntryModel: timeEntryModel) ?? DashboardState.init());
   }
 
   onClockOut() async {
