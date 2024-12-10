@@ -1,4 +1,5 @@
 import 'package:workinax/time_entry/data/model/work_break.dart';
+import 'package:collection/collection.dart';
 
 class TimeEntryModel {
   final int? id;
@@ -18,6 +19,8 @@ class TimeEntryModel {
         startTime = DateTime.now(),
         endTime = null,
         breaks = [];
+  
+  bool get hasBreakInProgress => breaks.firstWhereOrNull((wb)=> wb.endTime == null) != null;
 
   Duration get totalBreakHours =>
       breaks.fold(Duration.zero, (prev, next) => prev + next.duration);

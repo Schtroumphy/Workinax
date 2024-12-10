@@ -42,6 +42,13 @@ class DashboardController extends _$DashboardController {
 
     if (todayEntry == null) return DashboardState.init();
 
+    if (todayEntry.hasBreakInProgress) {
+      return DashboardState(
+        modeType: ModeType.breakInProgress,
+        timeEntryModel: todayEntry,
+      );
+    }
+
     return DashboardState(
       modeType: todayEntry.endTime != null ? ModeType.workInProgress : ModeType.workEnd,
       timeEntryModel: todayEntry,
