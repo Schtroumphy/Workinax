@@ -10,6 +10,7 @@ void main() {
     const ProviderScope(
       child: MaterialApp(
         locale: Locale('fr', 'FR'),
+        debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
